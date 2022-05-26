@@ -1,0 +1,25 @@
+.content {
+    padding: 16px;
+}
+
+.content > mat-card {
+    width: 200px;
+}
+
+mat-toolbar > button{
+  position: fixed;
+  right: 0;
+  margin-right: 20px;
+}
+
+.TODO{
+  background-color: red;
+}
+
+.PROGRESS{
+  background-color: orange;
+}
+
+.DONE{
+  background-color: green;
+}

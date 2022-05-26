@@ -1,1 +1,24 @@
-<mat-slider min="1" max="100" step="1" value="50"></mat-slider>
+<mat-toolbar [class.mat-elevation-z6]="true" >
+  <span>{{title}}</span>
+  <button mat-flat-button color="primary" (click)="createTodo()">+</button>
+</mat-toolbar>
+<div class="content">
+  <div fxLayout="row wrap" fxLayoutGap="16px grid">
+    <div  fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let todo of todos;">
+      <mat-card class="mat-elevation-z4, {{todo.state}}">
+        <mat-card-header>
+          <mat-card-title>{{todo.title}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            {{todo.content}}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button (click)="deleteTodo(todo.id)" mat-button>Supprimer</button>
+          <button *ngIf="todo.state !== enumState.DONE" mat-button>{{getContent(todo.state)}}</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>
