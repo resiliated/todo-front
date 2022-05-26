@@ -1,0 +1,44 @@
+@import '~antd/dist/antd.less';
+
+body{
+background-color: #f0f2f5;
+}
+
+nav{
+position: fixed;
+height: 100%;
+z-index: 999;
+}
+
+main{
+margin-left: 80px;
+}
+
+.hidden{
+display: none;
+}
+
+.visible{
+display: block;
+}
+
+.formContainer{
+margin-top: 50px;
+}
+
+/** OVERRIDE ANTD **/
+.ant-menu{
+height: 100%;
+}
+.ant-layout-content{
+padding: 10px;
+}
+
+.ant-layout-footer{
+position: fixed;
+bottom: 0;
+z-index: 1;
+padding: 10px;
+text-align: center;
+}
+
