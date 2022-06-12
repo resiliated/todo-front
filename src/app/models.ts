@@ -3,6 +3,7 @@ export class Todo{
   public content: string;
   public title: string;
   public state: State;
+  public creation: Date;
 }
 
 export enum State{

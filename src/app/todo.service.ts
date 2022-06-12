@@ -9,17 +9,24 @@ import { Observable, of } from 'rxjs';
 })
 export class TodoService {
 
+  //API = "http://54.37.13.50:8080/todo";
+  API = "http://localhost:8080/todo";
+
   constructor(public http: HttpClient) {}
 
   getTodos(): Observable<Todo[]>{
-    return this.http.get<Todo[]>("http://localhost:8080/todo");
+    return this.http.get<Todo[]>(this.API);
   }
 
   deleteTodo(id: number): Observable<Object>{
-    return this.http.delete("http://localhost:8080/todo/"+id);
+    return this.http.delete(this.API+"/"+id);
   }
 
-  createTodo(): Observable<Object>{
-    return this.http.post("http://localhost:8080/todo", {});
+  createTodo(todo: Todo): Observable<Object>{
+    return this.http.post(this.API, todo);
+  }
+
+  updateTodo(todo: Todo): Observable<Object>{
+    return this.http.put(this.API, todo);
   }
 }
