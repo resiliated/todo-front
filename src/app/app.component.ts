@@ -77,10 +77,13 @@ export class AppComponent{
     dialogRef.afterClosed().subscribe(
       (data: any) => {
         console.log("Dialog output:", data)
-        this.selectedTodo.title = data.title;
-        this.selectedTodo.content = data.content;
-        this.createOrUpdateTodo(this.selectedTodo);
-        this.selectedTodo = new Todo();
+
+        if(data){
+            this.selectedTodo.title = data.title;
+            this.selectedTodo.content = data.content;
+            this.createOrUpdateTodo(this.selectedTodo);
+            this.selectedTodo = new Todo();
+        }
       }
     );
   }

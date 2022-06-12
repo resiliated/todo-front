@@ -21,9 +21,9 @@ export class FormComponent implements OnInit {
     this.todo = data.todo
 
     this.form = fb.group({
-                title: [this.todo.title, Validators.required],
-                content: [this.todo.content, Validators.required]
-            });
+      title: [this.todo.title, Validators.required],
+      content: [this.todo.content, Validators.required]
+    });
     console.log(this.todo);
   }
 
