@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Todo, State } from '../models';
+import { Todo, State, Type } from '../models';
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 
 import {
@@ -16,12 +16,15 @@ import {
 export class FormComponent implements OnInit {
   form: FormGroup;
   todo:Todo;
+  types: Type[];
   constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<FormComponent>,
     @Inject(MAT_DIALOG_DATA) data: any) {
-    this.todo = data.todo
+    this.todo = data.todo;
+    this.types = data.types;
 
     this.form = fb.group({
       title: [this.todo.title, Validators.required],
+      types: [this.types],
       content: [this.todo.content, Validators.required]
     });
     console.log(this.todo);

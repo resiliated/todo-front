@@ -7,9 +7,8 @@
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Type</mat-label>
-    <mat-select>
-      <mat-option value="one">First option</mat-option>
-      <mat-option value="two">Second option</mat-option>
+    <mat-select >
+      <mat-option *ngFor="let type of types" value="type.id">{{type.entitled}}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill">

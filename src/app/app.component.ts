@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Todo, State } from './models';
+import { Todo, State, Type } from './models';
 import { TodoService } from './todo.service';
+import { TypeService } from './type.service';
 import { FormComponent } from './form/form.component';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 
@@ -13,10 +14,22 @@ import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 export class AppComponent{
   title = 'TODO liste de Boris';
   todos: Todo[] = [];
+  types: Type[] = [];
   selectedTodo: Todo ;
 
+  constructor(public todoService: TodoService, public typeService: TypeService, private dialog: MatDialog){
+    this.todoService = todoService;
+    this.typeService = typeService;
+    this.selectedTodo = new Todo();
+  }
+
+  ngOnInit() {
+    this.getTypes();
+    this.getTodos();
+  }
+
   public get enumState(): typeof State {
-      return State;
+        return State;
   }
 
   public nextStepContent(state: State){
@@ -43,15 +56,6 @@ export class AppComponent{
     return "Etat incohérent";
   }
 
-  constructor(public todoService: TodoService, private dialog: MatDialog){
-    this.todoService = todoService;
-    this.selectedTodo = new Todo();
-  }
-
-  ngOnInit() {
-    this.getTodos();
-  }
-
   deleteTodo(id: number){
     this.todoService.deleteTodo(id).subscribe(res => {
       this.getTodos();
@@ -71,19 +75,21 @@ export class AppComponent{
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
-            todo: this.selectedTodo
+            todo: this.selectedTodo,
+            types: this.types,
+            creation: true
         };
     const dialogRef = this.dialog.open(FormComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(
       (data: any) => {
         console.log("Dialog output:", data)
-
         if(data){
             this.selectedTodo.title = data.title;
             this.selectedTodo.content = data.content;
+            //this.selectedTodo.type.id = data.types;
             this.createOrUpdateTodo(this.selectedTodo);
-            this.selectedTodo = new Todo();
         }
+        this.selectedTodo = new Todo();
       }
     );
   }
@@ -107,6 +113,12 @@ export class AppComponent{
     }
     this.todoService.updateTodo(todo).subscribe(res => {
       this.getTodos();
+    });
+  }
+
+  getTypes(){
+    this.typeService.getTypes().subscribe(types =>{
+      this.types = types;
     });
   }
 

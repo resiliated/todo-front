@@ -4,6 +4,12 @@ export class Todo{
   public title: string;
   public state: State;
   public creation: Date;
+  public type: Type;
+}
+
+export class Type{
+  public id: number;
+  public entitled: string;
 }
 
 export enum State{
@@ -27,4 +33,3 @@ export namespace State {
         return -1;
     }
 }
-
