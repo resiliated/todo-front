@@ -82,11 +82,13 @@ export class AppComponent{
     const dialogRef = this.dialog.open(FormComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(
       (data: any) => {
-        console.log("Dialog output:", data)
+      console.log("type id " + data.type);
         if(data){
             this.selectedTodo.title = data.title;
             this.selectedTodo.content = data.content;
-            //this.selectedTodo.type.id = data.types;
+            this.selectedTodo.type.id = data.type;
+                        console.log(this.selectedTodo);
+
             this.createOrUpdateTodo(this.selectedTodo);
         }
         this.selectedTodo = new Todo();

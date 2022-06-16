@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Todo} from './models';
 import { Observable, of } from 'rxjs';
-
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,8 @@ import { Observable, of } from 'rxjs';
 export class TodoService {
 
   //API = "http://54.37.13.50:8080/todo";
-  API = "http://localhost:8080/todo";
+  //API = "/todo";
+  API = environment.apiUrl + "/todo";
 
   constructor(public http: HttpClient) {}
 

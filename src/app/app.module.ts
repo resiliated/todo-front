@@ -14,6 +14,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatIconModule} from '@angular/material/icon';
+
 
 import { FormComponent } from './form/form.component';
 
@@ -36,7 +38,9 @@ import { FormComponent } from './form/form.component';
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIconModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],
