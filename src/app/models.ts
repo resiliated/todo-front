@@ -5,6 +5,10 @@ export class Todo{
   public state: State;
   public creation: Date;
   public type: Type;
+
+  constructor(){
+    this.type = new Type();
+  }
 }
 
 export class Type{
