@@ -86,7 +86,7 @@ export class AppComponent{
         if(data){
             this.selectedTodo.title = data.title;
             this.selectedTodo.content = data.content;
-            this.selectedTodo.type.id = data.type;
+            //this.selectedTodo.type.id = data.type;
                         console.log(this.selectedTodo);
 
             this.createOrUpdateTodo(this.selectedTodo);

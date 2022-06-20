@@ -5,12 +5,12 @@
     <mat-label>Titre</mat-label>
     <input matInput value="{{todo.title}}" formControlName="title">
   </mat-form-field>
-  <mat-form-field appearance="fill">
+  <!--<mat-form-field appearance="fill">
     <mat-label>Type</mat-label>
     <mat-select [(value)]="todo.type.id" formControlName="type">
       <mat-option *ngFor="let type of types" value="{{type.id}}">{{type.entitled}}</mat-option>
     </mat-select>
-  </mat-form-field>
+  </mat-form-field>-->
   <mat-form-field appearance="fill">
     <mat-label>Description</mat-label>
     <textarea formControlName="content" matInput>{{todo.content}}</textarea>
