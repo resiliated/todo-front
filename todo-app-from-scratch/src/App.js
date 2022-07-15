@@ -5,14 +5,36 @@ import TodoForm from './Components/TodoForm.js';
 class App extends React.Component {
   constructor(props){
     super(props);
-    this.state = {todos: [{'id': 0, 'title': "Première todo", 'content': "Contenu de la todo"},
-                          {'id': 1, 'title': "Deuxième todo", 'content': "Contenu de la todo"},
-                          {'id': 2, 'title': "Toisième todo", 'content': "Contenu de la todo"},
-                          {'id': 3, 'title': "Quatrième todo", 'content': "Contenu de la todo"}
-                          ]};
+    this.state = {
+          error: null,
+          isLoaded: false,
+          todos: []
+        };
     this.onTodoCreation = this.onTodoCreation.bind(this);
     this.removeTodo = this.removeTodo.bind(this);
   }
+
+  componentDidMount() {
+      fetch("http://54.37.13.50:8080/todo")
+        .then(res => res.json())
+        .then(
+          (result) => {
+            this.setState({
+              isLoaded: true,
+              todos: result
+            });
+          },
+          // Remarque : il est important de traiter les erreurs ici
+          // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
+          // des exceptions provenant de réels bugs du composant.
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error
+            });
+          }
+        )
+    }
 
   removeTodo(todoToRemove){
     this.setState({
