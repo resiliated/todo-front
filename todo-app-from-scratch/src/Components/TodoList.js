@@ -8,7 +8,7 @@ class TodoList extends React.Component {
 
     this.props.todos.forEach((todo)=>{
       todos.push(<Todo onTodoDeletion={this.props.onTodoDeletion} key={todo.id} todo={todo}/>);
-    });
+    }); //I think is not a good way to generate todo list, use Fragments ? 
 
     return <div className="todo-list-container">
       <h1>{this.props.title}</h1>
