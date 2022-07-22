@@ -1,58 +1,68 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoList from './Components/TodoList.js';
 import TodoForm from './Components/TodoForm.js';
 
-class App extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-          error: null,
-          isLoaded: false,
-          todos: []
-        };
-    this.onTodoCreation = this.onTodoCreation.bind(this);
-    this.removeTodo = this.removeTodo.bind(this);
+export function App(props) {
+  const [todos, setTodos] = useState([]);
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    fetch(props.URL_API)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          setTodos(result);
+        },
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      );
+  }, []);
+
+  function onTodoCreation(title, content){
+    fetch(props.URL_API, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: title,
+        content: content,
+      })
+    }).then(res => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          setTodos(todos => [...todos, result]);
+        },
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      );
   }
 
-  componentDidMount() {
-      fetch("http://54.37.13.50:8080/todo")
-        .then(res => res.json())
-        .then(
-          (result) => {
-            this.setState({
-              isLoaded: true,
-              todos: result
-            });
-          },
-          (error) => {
-            this.setState({
-              isLoaded: true,
-              error
-            });
-          }
-        )
-    }
-
-  removeTodo(todoToRemove){
-    this.setState({
-      todos: this.state.todos.filter(todo =>{
-        return todo.id !== todoToRemove.id;
-      })
+  function onTodoDeletion(todoToRemove){
+    fetch(props.URL_API+"/"+todoToRemove.id, {
+      method: 'DELETE'
+    }).then((result)=>{
+      setTodos(todos.filter(todo =>{
+          return todo.id !== todoToRemove.id;
+        })
+      );
     });
   }
 
-  onTodoCreation(title, content){
-    this.setState(prevState => ({
-      todos: [...prevState.todos, {id: (new Date()).getTime(),title: title,content: content}]
-    }));
-  }
-
-  render() {
-    return <div>
-      <TodoForm onTodoCreation={this.onTodoCreation} />
-      <TodoList onTodoDeletion={this.removeTodo} title="Todo liste de Boris" todos={this.state.todos}/>
+  return (
+    <div>
+      <TodoForm onTodoCreation={onTodoCreation} />
+      <TodoList onTodoDeletion={onTodoDeletion} title="Todo liste de Boris" todos={todos}/>
     </div>
-  }
+  );
 }
 
 export default App;
