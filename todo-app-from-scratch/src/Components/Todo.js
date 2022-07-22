@@ -1,23 +1,17 @@
 import React from 'react';
 
-class Todo extends React.Component {
+export function Todo(props){
 
-  constructor(props){
-    super(props);
-    this.handleTodoDeletion = this.handleTodoDeletion.bind(this);
+  function handleTodoDeletion(){
+    props.onTodoDeletion(props.todo);
   }
 
-  handleTodoDeletion(){
-    this.props.onTodoDeletion(this.props.todo);
-  }
+  return (<div className="container todo">
+    <h1>{props.todo.title}</h1>
+    <h2>{props.todo.content}</h2>
+    <button onClick={handleTodoDeletion}>Supprimer</button>
+  </div>);
 
-  render() {
-    return <div className="container todo">
-      <h1>{this.props.todo.title}</h1>
-      <h2>{this.props.todo.content}</h2>
-      <button onClick={this.handleTodoDeletion}>Supprimer</button>
-    </div>;
-  }
 }
 
 export default Todo;

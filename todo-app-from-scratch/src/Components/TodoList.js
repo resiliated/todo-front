@@ -1,20 +1,18 @@
 import React from 'react';
 import Todo from './Todo.js'
 
-class TodoList extends React.Component {
+export function TodoList(props) {
 
-  render() {
-    const todos = [];
+  const todos = [];
 
-    this.props.todos.forEach((todo)=>{
-      todos.push(<Todo onTodoDeletion={this.props.onTodoDeletion} key={todo.id} todo={todo}/>);
-    }); //I think is not a good way to generate todo list, use Fragments ? 
+  props.todos.forEach((todo)=>{
+    todos.push(<Todo onTodoDeletion={props.onTodoDeletion} key={todo.id} todo={todo}/>);
+  });
 
-    return <div className="todo-list-container">
-      <h1>{this.props.title}</h1>
-      <div>{todos}</div>
-    </div>;
-  }
+  return(<div className="todo-list-container">
+    <h1>{props.title}</h1>
+    <div>{todos}</div>
+  </div>);
 }
 
 export default TodoList;
