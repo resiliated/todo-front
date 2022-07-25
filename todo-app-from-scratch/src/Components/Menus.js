@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Menu } from 'antd';
+import React, { useEffect } from 'react';
 import { UnorderedListOutlined, DiffOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from "react-router-dom";
+import { Menu } from 'antd';
 
-
-export function Header(){
+export function Menus(){
 
   let navigate = useNavigate();
   let location = useLocation();
 
   useEffect(() => {
+      //TODO
      console.log(location)
   }, [location]);
 
@@ -37,4 +36,4 @@ export function Header(){
   )
 }
 
-export default Header;
+export default Menus;

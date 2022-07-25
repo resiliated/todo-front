@@ -11,6 +11,7 @@ export function TodoList(props) {
 
   props.todos.sort(function(a, b) {
     //TODO use an enum
+    return 0;
   });
 
   return(<div>{todos}</div>);

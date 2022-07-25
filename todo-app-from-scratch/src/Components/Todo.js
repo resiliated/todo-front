@@ -1,4 +1,13 @@
 import React from 'react';
+import { Card, Row, Col, Tag } from 'antd';
+import { Typography } from 'antd';
+import {
+  StepForwardOutlined,
+  EditOutlined,
+  DeleteOutlined
+} from '@ant-design/icons';
+
+const { Paragraph, Text } = Typography;
 
 export function Todo(props){
 
@@ -10,22 +19,46 @@ export function Todo(props){
     props.onNextState(props.todo);
   }
 
-  function getNextStateContent(){
-    return props.todo.state === "TODO" ? "Commencer" : "Terminer";
+  function getStateColor(){
+    var color;
+    switch (props.todo.state) {
+      case "TODO":
+        color = "red";
+        break;
+      case "PROGRESS":
+        color = "volcano";
+        break;
+      case "DONE":
+        color = "green";
+        break;
+      default:
+        break;
+    }
+    return color;
   }
 
-  function getTodoClassNames(){
-    return "container todo " + props.todo.state;
-  }
-
-  function handleReset(){
-    props.onReset(props.todo);
-  }
+  function getStateContent(){
+      var content;
+      switch (props.todo.state) {
+        case "TODO":
+          content = "A faire";
+          break;
+        case "PROGRESS":
+          content = "En cours";
+          break;
+        case "DONE":
+          content = "Fait";
+          break;
+        default:
+          break;
+      }
+      return content;
+    }
 
   //TODO use same button to next and reset state
   return (
     <Card
-      className={getTodoClassNames()}
+      style={{ margin: '0 0 12px 0' }}
       title={<Row><Col span={21} >{props.todo.title}</Col><Col span={3} ><Tag color={getStateColor()}>{getStateContent()}</Tag></Col></Row>}
       actions={[
         <StepForwardOutlined onClick={handleNextState} className={"step-forward"}/>,

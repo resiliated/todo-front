@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Input, TextArea } from 'antd';
+import { Button, Form, Input } from 'antd';
+import { Card} from 'antd';
 
 export function TodoForm(props) {
 
@@ -13,24 +14,20 @@ export function TodoForm(props) {
     navigate("/");
   }
 
-  function handleTitleChange(e){
-  }
-
-  function handleContentChange(e){
-  }
-
   return (
-    <Form className="container">
-      <Form.Item label="Titre">
-        <Input placeholder="Entrez le titre de la todo" />
-      </Form.Item>
-      <Form.Item label="Contenu">
-        <Input rows={4} placeholder="Entrez le contenu de la todo" />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" onClick={handleTodoCreation}>Créer</Button>
-      </Form.Item>
-    </Form>
+    <Card>
+      <Form className="container">
+        <Form.Item label="Titre">
+          <Input placeholder="Entrez le titre de la todo" />
+        </Form.Item>
+        <Form.Item label="Contenu">
+          <Input rows={4} placeholder="Entrez le contenu de la todo" />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" onClick={handleTodoCreation}>Créer</Button>
+        </Form.Item>
+      </Form>
+    </Card>
   );
 }
 
