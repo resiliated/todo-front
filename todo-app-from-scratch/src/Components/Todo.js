@@ -23,14 +23,22 @@ export function Todo(props){
   }
 
   //TODO use same button to next and reset state
-  return (<div className={getTodoClassNames()}>
-    <h1>{props.todo.title}</h1>
-    <h2>{props.todo.content}</h2>
-    <p>Créée le: {props.todo.creation}</p>
-    <button onClick={handleTodoDeletion}>Supprimer</button>
-    <button onClick={handleNextState} className={props.todo.state !== "DONE" ? 'visible' : 'hidden'}>{getNextStateContent()}</button>
-    <button onClick={handleReset} className={props.todo.state === "DONE" ? 'visible' : 'hidden'}>RAZ</button>
-  </div>);
+  return (
+    <Card
+      className={getTodoClassNames()}
+      title={<Row><Col span={21} >{props.todo.title}</Col><Col span={3} ><Tag color={getStateColor()}>{getStateContent()}</Tag></Col></Row>}
+      actions={[
+        <StepForwardOutlined onClick={handleNextState} className={"step-forward"}/>,
+        <EditOutlined />,
+        <DeleteOutlined onClick={handleTodoDeletion}/>
+      ]}
+      >
+      <Typography>
+        <Paragraph>{props.todo.content}</Paragraph>
+        <Text strong>Créée le: {props.todo.creation}</Text>
+      </Typography>
+    </Card>
+  );
 }
 
 export default Todo;
