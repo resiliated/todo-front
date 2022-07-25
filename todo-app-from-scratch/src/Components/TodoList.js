@@ -6,7 +6,7 @@ export function TodoList(props) {
   const todos = [];
 
   props.todos.forEach((todo)=>{
-    todos.push(<Todo onTodoDeletion={props.onTodoDeletion} key={todo.id} todo={todo}/>);
+    todos.push(<Todo onTodoDeletion={props.onTodoDeletion} onNextState={props.onNextState} onReset={props.onReset} key={todo.id} todo={todo}/>);
   });
 
   return(<div className="todo-list-container">

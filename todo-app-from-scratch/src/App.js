@@ -11,9 +11,9 @@ export function App(props) {
     fetch(props.URL_API)
       .then(res => res.json())
       .then(
-        (result) => {
+        (todos) => {
           setIsLoaded(true);
-          setTodos(result);
+          setTodos(todos);
         },
         (error) => {
           setIsLoaded(true);
@@ -35,15 +35,15 @@ export function App(props) {
       })
     }).then(res => res.json())
       .then(
-        (result) => {
+        (createdTodo) => {
           setIsLoaded(true);
-          setTodos(todos => [...todos, result]);
+          setTodos(todos => [...todos, createdTodo]);
         },
         (error) => {
           setIsLoaded(true);
           setError(error);
         }
-      );
+    );
   }
 
   function onTodoDeletion(todoToRemove){
@@ -57,10 +57,53 @@ export function App(props) {
     });
   }
 
+  //TODO create service to CRUD opartions
+  function updateTodo(todoToUpdate){
+    fetch(props.URL_API, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(todoToUpdate)
+      }).then(res => res.json())
+      .then(
+        (updatedTodo) => {
+          setIsLoaded(true);
+          setTodos(todos.filter(todo =>{
+              return todo.id !== updatedTodo.id;
+            })
+          );
+          setTodos(todos => [...todos, updatedTodo]);
+        },
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+    );
+  }
+
+  function onReset(todo){
+    todo.state = "TODO";
+    updateTodo(todo);
+  }
+
+  function onNextState(todo){
+    switch (todo.state) {
+      case "TODO":
+        todo.state = "PROGRESS";
+        break;
+      case "PROGRESS":
+        todo.state = "DONE";
+        break;
+    }
+    updateTodo(todo);
+  }
+
   return (
     <div>
       <TodoForm onTodoCreation={onTodoCreation} />
-      <TodoList onTodoDeletion={onTodoDeletion} title="Todo liste de Boris" todos={todos}/>
+      <TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} onReset={onReset} title="Todo liste de Boris" todos={todos}/>
     </div>
   );
 }
