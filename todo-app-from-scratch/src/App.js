@@ -3,11 +3,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './Components/Header.js';
 import TodoList from './Components/TodoList.js';
 import TodoForm from './Components/TodoForm.js';
+import './App.less';
+
 
 export function App(props) {
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+
 
   useEffect(() => {
     fetch(props.URL_API)
@@ -85,11 +88,6 @@ export function App(props) {
     );
   }
 
-  function onReset(todo){
-    todo.state = "TODO";
-    updateTodo(todo);
-  }
-
   function onNextState(todo){
     switch (todo.state) {
       case "TODO":
@@ -97,6 +95,9 @@ export function App(props) {
         break;
       case "PROGRESS":
         todo.state = "DONE";
+        break;
+      case "DONE":
+        todo.state = "TODO";
         break;
     }
     updateTodo(todo);
@@ -106,10 +107,10 @@ export function App(props) {
     <BrowserRouter>
       <div>
         <Header/>
-          <div>
+          <div className="main-container site-card-border-less-wrapper">
             <Routes>
-              <Route path="/" element={<TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} onReset={onReset} title="Todo liste de Boris" todos={todos}/>} />
-              <Route path="/add" element={<TodoForm onTodoCreation={onTodoCreation} />} />
+              <Route path="/" element={<TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} title="Todo liste de Boris" todos={todos}/>} />
+              <Route path="/add" element={<TodoForm onTodoCreation={onTodoCreation}/>} />
             </Routes>
           </div>
       </div>

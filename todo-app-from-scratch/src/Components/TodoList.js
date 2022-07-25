@@ -9,10 +9,7 @@ export function TodoList(props) {
     todos.push(<Todo onTodoDeletion={props.onTodoDeletion} onNextState={props.onNextState} onReset={props.onReset} key={todo.id} todo={todo}/>);
   });
 
-  return(<div className="todo-list-container">
-    <h1>{props.title}</h1>
-    <div>{todos}</div>
-  </div>);
+  return(<div>{todos}</div>);
 }
 
 export default TodoList;

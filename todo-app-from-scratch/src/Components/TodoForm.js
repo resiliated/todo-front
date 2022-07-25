@@ -1,10 +1,16 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
+import { Button, Form, Input, TextArea } from 'antd';
 
 export function TodoForm(props) {
 
+  let navigate = useNavigate();
+
   function handleTodoCreation(e){
     e.preventDefault()
+    console.log(e);
     props.onTodoCreation(e.target.form[0].value, e.target.form[1].value);
+    navigate("/");
   }
 
   function handleTitleChange(e){
@@ -13,14 +19,19 @@ export function TodoForm(props) {
   function handleContentChange(e){
   }
 
-  return (<form className="container">
-    <label>Titre :</label>
-    <input type="text" name="Titre" onChange={handleTitleChange} value={props.title} />
-    <label>Contenu :</label>
-    <textarea type="text" name="Contenu" onChange={handleContentChange} value={props.content} />
-    <input onClick={handleTodoCreation} type="submit" value="Créer" />
-  </form>);
-
+  return (
+    <Form className="container">
+      <Form.Item label="Titre">
+        <Input placeholder="Entrez le titre de la todo" />
+      </Form.Item>
+      <Form.Item label="Contenu">
+        <Input rows={4} placeholder="Entrez le contenu de la todo" />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" onClick={handleTodoCreation}>Créer</Button>
+      </Form.Item>
+    </Form>
+  );
 }
 
 export default TodoForm;

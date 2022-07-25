@@ -1,31 +1,7 @@
-.container{
-  display: flex;
-  flex-direction: column;
+.site-card-border-less-wrapper {
+  padding: 30px;
+  background: #ececec;
 }
-
-.todo{
-  margin-top: 5px;
-  padding: 5px;
-}
-
-.TODO{
-  background-color: red;
-}
-
-.PROGRESS{
-  background-color: blue;
-}
-
-.DONE{
-  background-color: green;
-}
-
-.hidden{
-  /*visibility: hidden;*/
-  display: none;
-}
-
-.visible{
-  display: block;
-}
-
+  [data-theme="dark"] .site-card-border-less-wrapper {
+    background: #303030;
+  }
