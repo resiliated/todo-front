@@ -23,7 +23,7 @@ export function Todo(props){
   }
 
   //TODO use same button to next and reset state
-  return (<div class={getTodoClassNames()}>
+  return (<div className={getTodoClassNames()}>
     <h1>{props.todo.title}</h1>
     <h2>{props.todo.content}</h2>
     <p>Créée le: {props.todo.creation}</p>

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Header from './Components/Header.js';
 import TodoList from './Components/TodoList.js';
 import TodoForm from './Components/TodoForm.js';
 
@@ -101,10 +103,17 @@ export function App(props) {
   }
 
   return (
-    <div>
-      <TodoForm onTodoCreation={onTodoCreation} />
-      <TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} onReset={onReset} title="Todo liste de Boris" todos={todos}/>
-    </div>
+    <BrowserRouter>
+      <div>
+        <Header/>
+          <div>
+            <Routes>
+              <Route path="/" element={<TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} onReset={onReset} title="Todo liste de Boris" todos={todos}/>} />
+              <Route path="/add" element={<TodoForm onTodoCreation={onTodoCreation} />} />
+            </Routes>
+          </div>
+      </div>
+    </BrowserRouter>
   );
 }
 
