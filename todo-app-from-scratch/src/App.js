@@ -16,6 +16,7 @@ export function App({URL_API}) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    console.log("use effect app");
     fetch(URL_API)
       .then(res => res.json())
       .then(
@@ -92,19 +93,6 @@ export function App({URL_API}) {
   }
 
   function onNextState(todo){
-    switch (todo.state) {
-      case "TODO":
-        todo.state = "PROGRESS";
-        break;
-      case "PROGRESS":
-        todo.state = "DONE";
-        break;
-      case "DONE":
-        todo.state = "TODO";
-        break;
-      default:
-        break;
-    }
     updateTodo(todo);
   }
 
@@ -125,7 +113,7 @@ export function App({URL_API}) {
         </Header>
 
         <Content style={{
-           padding: '82px 50px'
+           padding: '82px 20px'
          }}>
           <Routes>
             <Route path="/" element={<TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} title="Todo liste de Boris" todos={todos}/>} />

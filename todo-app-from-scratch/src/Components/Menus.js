@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { UnorderedListOutlined, DiffOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu } from 'antd';
@@ -7,11 +7,14 @@ export function Menus(){
 
   let navigate = useNavigate();
   let location = useLocation();
+  const getSelectedKey = useCallback(() =>{
+      return location.pathname === "/" ? "list" : "add";
+    }, [location]);
+  const [selectedKey, setSelectedKey] = useState(getSelectedKey())
 
   useEffect(() => {
-      //TODO
-     console.log(location)
-  }, [location]);
+     setSelectedKey(getSelectedKey());
+  }, [setSelectedKey, getSelectedKey]);
 
   function onSelect(e){
     navigate(e.item.props.location);
@@ -32,7 +35,7 @@ export function Menus(){
     }
   ];
   return (
-    <Menu onSelect={onSelect} mode="horizontal" items={items} defaultSelectedKeys={["list"]}/>
+    <Menu onSelect={onSelect} mode="horizontal" items={items} selectedKeys={[selectedKey]}/>
   )
 }
 

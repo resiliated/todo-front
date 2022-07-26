@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Card, Row, Col, Tag } from 'antd';
 import { Typography } from 'antd';
 import {
@@ -9,19 +9,38 @@ import {
 
 const { Paragraph, Text } = Typography;
 
-export function Todo(props){
+export function Todo({todo, onNextState, onTodoDeletion}){
+    useEffect(() => {
+      }, []);
 
   function handleTodoDeletion(){
-    props.onTodoDeletion(props.todo);
+    onTodoDeletion(todo);
   }
 
   function handleNextState(){
-    props.onNextState(props.todo);
+    setNextState();
+    onNextState(todo);
+  }
+
+  function setNextState(){
+    switch (todo.state) {
+      case "TODO":
+        todo.state = "PROGRESS";
+        break;
+      case "PROGRESS":
+        todo.state = "DONE";
+        break;
+      case "DONE":
+        todo.state = "TODO";
+        break;
+      default:
+        break;
+    }
   }
 
   function getStateColor(){
     var color;
-    switch (props.todo.state) {
+    switch (todo.state) {
       case "TODO":
         color = "red";
         break;
@@ -39,7 +58,7 @@ export function Todo(props){
 
   function getStateContent(){
       var content;
-      switch (props.todo.state) {
+      switch (todo.state) {
         case "TODO":
           content = "A faire";
           break;
@@ -55,11 +74,10 @@ export function Todo(props){
       return content;
     }
 
-  //TODO use same button to next and reset state
   return (
     <Card
       style={{ margin: '0 0 12px 0' }}
-      title={<Row><Col span={21} >{props.todo.title}</Col><Col span={3} ><Tag color={getStateColor()}>{getStateContent()}</Tag></Col></Row>}
+      title={<Row><Col span={21} >{todo.title}</Col><Col span={3} ><Tag color={getStateColor()}>{getStateContent()}</Tag></Col></Row>}
       actions={[
         <StepForwardOutlined onClick={handleNextState} className={"step-forward"}/>,
         <EditOutlined />,
@@ -67,8 +85,8 @@ export function Todo(props){
       ]}
       >
       <Typography>
-        <Paragraph>{props.todo.content}</Paragraph>
-        <Text strong>Créée le: {props.todo.creation}</Text>
+        <Paragraph>{todo.content}</Paragraph>
+        <Text strong>Créée le: {todo.creation}</Text>
       </Typography>
     </Card>
   );
