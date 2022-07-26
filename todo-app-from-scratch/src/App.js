@@ -16,7 +16,6 @@ export function App({URL_API}) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    console.log("use effect app");
     fetch(URL_API)
       .then(res => res.json())
       .then(
@@ -67,7 +66,7 @@ export function App({URL_API}) {
   }
 
   //TODO create service to CRUD opartions
-  function updateTodo(todoToUpdate){
+  function onTodoEdition(todoToUpdate){
     fetch(URL_API, {
       method: 'PUT',
       headers: {
@@ -93,7 +92,7 @@ export function App({URL_API}) {
   }
 
   function onNextState(todo){
-    updateTodo(todo);
+    onTodoEdition(todo);
   }
 
   return (
@@ -117,7 +116,7 @@ export function App({URL_API}) {
          }}>
           <Routes>
             <Route path="/" element={<TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} title="Todo liste de Boris" todos={todos}/>} />
-            <Route path="/add" element={<TodoForm onTodoCreation={onTodoCreation}/>} />
+            <Route path="/add" element={<TodoForm onTodoCreation={onTodoCreation} onTodoEdition={onTodoEdition}/>} />
           </Routes>
         </Content>
         <Footer

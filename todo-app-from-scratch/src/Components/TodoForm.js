@@ -1,30 +1,65 @@
-import React from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Form, Input } from 'antd';
 import { Card} from 'antd';
 
-export function TodoForm(props) {
+export function TodoForm({onTodoCreation, onTodoEdition}) {
 
   let navigate = useNavigate();
+  let location = useLocation();
 
-  function handleTodoCreation(e){
-    e.preventDefault()
-    console.log(e);
-    props.onTodoCreation(e.target.form[0].value, e.target.form[1].value);
+  let [todo, setTodo] = useState(location.state);
+
+  useEffect(() => {
+       setTodo(location.state);
+    }, [location, setTodo]);
+
+  function handleTodoCreation(values){
+    console.log('Success:', values);
+
+    if(todo === null){
+        onTodoCreation(values.title, values.content);
+    }else{
+        todo.title = values.title;
+        todo.content = values.content;
+        onTodoEdition(todo);
+    }
+
     navigate("/");
+  }
+
+  function onFinishFailed(errorInfo){
+    console.log('Failed:', errorInfo);
   }
 
   return (
     <Card>
-      <Form className="container">
-        <Form.Item label="Titre">
+      <Form className="container"
+        onFinish={handleTodoCreation}
+        onFinishFailed={onFinishFailed}
+      >
+        <Form.Item
+            label="Titre"
+            name="title"
+            initialValue= {todo ? todo.title : null}
+            rules={[
+              {
+                required: true,
+                message: 'Entrez un titre !',
+              },
+            ]}
+        >
           <Input placeholder="Entrez le titre de la todo" />
         </Form.Item>
-        <Form.Item label="Contenu">
+        <Form.Item
+            label="Contenu"
+            name="content"
+            initialValue={todo ? todo.content : null}
+        >
           <Input rows={4} placeholder="Entrez le contenu de la todo" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onClick={handleTodoCreation}>Créer</Button>
+          <Button type="primary" htmlType="submit">{todo ? "Editer" : "Créer"}</Button>
         </Form.Item>
       </Form>
     </Card>

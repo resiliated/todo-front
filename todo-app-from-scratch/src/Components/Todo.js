@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import { Card, Row, Col, Tag } from 'antd';
 import { Typography } from 'antd';
+import { useNavigate } from "react-router-dom";
 import {
   StepForwardOutlined,
   EditOutlined,
@@ -10,17 +11,20 @@ import {
 const { Paragraph, Text } = Typography;
 
 export function Todo({todo, onNextState, onTodoDeletion}){
-    useEffect(() => {
-      }, []);
+    let navigate = useNavigate();
 
-  function handleTodoDeletion(){
-    onTodoDeletion(todo);
-  }
+    function onEdit(){
+        navigate("/add", {state: todo});
+    }
 
-  function handleNextState(){
-    setNextState();
-    onNextState(todo);
-  }
+    function handleTodoDeletion(){
+        onTodoDeletion(todo);
+    }
+
+    function handleNextState(){
+        setNextState();
+        onNextState(todo);
+    }
 
   function setNextState(){
     switch (todo.state) {
@@ -80,7 +84,7 @@ export function Todo({todo, onNextState, onTodoDeletion}){
       title={<Row><Col span={21} >{todo.title}</Col><Col span={3} ><Tag color={getStateColor()}>{getStateContent()}</Tag></Col></Row>}
       actions={[
         <StepForwardOutlined onClick={handleNextState} className={"step-forward"}/>,
-        <EditOutlined />,
+        <EditOutlined onClick={onEdit}/>,
         <DeleteOutlined onClick={handleTodoDeletion}/>
       ]}
       >
