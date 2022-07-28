@@ -29,6 +29,7 @@ export function App({URL_API}) {
   }, [URL_API, setError, setIsLoaded, setTodos]);
 
   function onTodoCreation(title, content){
+    setIsLoaded(false);
     fetch(URL_API, {
       method: 'POST',
       headers: {
@@ -53,6 +54,7 @@ export function App({URL_API}) {
   }
 
   function onTodoDeletion(todoToRemove){
+    setIsLoaded(false);
     fetch(URL_API+"/"+todoToRemove.id, {
       method: 'DELETE'
     }).then((result)=>{
@@ -60,11 +62,13 @@ export function App({URL_API}) {
           return todo.id !== todoToRemove.id;
         })
       );
+      setIsLoaded(true);
     });
   }
 
   //TODO create service to CRUD opartions
   function onTodoEdition(todoToUpdate){
+    setIsLoaded(false);
     fetch(URL_API, {
       method: 'PUT',
       headers: {
