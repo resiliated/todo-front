@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Layout } from 'antd';
-import { Spin } from 'antd';
-import { Row, Col} from 'antd';
+import { Layout, Row, Col, Spin } from 'antd';
 import Menus from './Components/Menus.js';
 import TodoList from './Components/TodoList.js';
 import TodoForm from './Components/TodoForm.js';
@@ -28,7 +26,7 @@ export function App({URL_API}) {
           setError(error);
         }
       );
-  }, [URL_API]);
+  }, [URL_API, setError, setIsLoaded, setTodos]);
 
   function onTodoCreation(title, content){
     fetch(URL_API, {
@@ -96,40 +94,42 @@ export function App({URL_API}) {
   }
 
   return (
-    <BrowserRouter>
-        <Header style={{
-          background: 'inherit',
-          position: 'fixed',
-          zIndex: 1,
-          width: '100%',
-          top: 0,
-          padding: 0
-        }}>
-          <Row>
-            <Col span={22}><Menus /></Col>
-            <Col span={2} style={{background: 'white'}}><Spin className={isLoaded ? "hidden": ""} /></Col>
-          </Row>
-        </Header>
+    <Layout>
+        <BrowserRouter>
+            <Header style={{
+              background: 'inherit',
+              position: 'fixed',
+              zIndex: 1,
+              width: '100%',
+              top: 0,
+              padding: 0
+            }}>
+              <Row>
+                <Col span={22}><Menus /></Col>
+                <Col span={2} style={{background: 'white'}}><Spin className={isLoaded ? "hidden": ""} /></Col>
+              </Row>
+            </Header>
 
-        <Content style={{
-           padding: '82px 20px'
-         }}>
-          <Routes>
-            <Route path="/" element={<TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} title="Todo liste de Boris" todos={todos}/>} />
-            <Route path="/add" element={<TodoForm onTodoCreation={onTodoCreation} onTodoEdition={onTodoEdition}/>} />
-          </Routes>
-        </Content>
-        <Footer
-          style={{
-            textAlign: 'center',
-            position: 'fixed',
-            bottom: 0,
-            width: '100%'
-          }}
-        >
-          Boris Design ©2022 Created by me
-        </Footer>
-    </BrowserRouter>
+            <Content style={{
+               padding: '82px 20px'
+             }}>
+              <Routes>
+                <Route path="/" element={<TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} title="Todo liste de Boris" todos={todos}/>} />
+                <Route path="/add" element={<TodoForm onTodoCreation={onTodoCreation} onTodoEdition={onTodoEdition}/>} />
+              </Routes>
+            </Content>
+            <Footer
+              style={{
+                textAlign: 'center',
+                position: 'fixed',
+                bottom: 0,
+                width: '100%'
+              }}
+            >
+              Boris Design ©2022 Created by me
+            </Footer>
+        </BrowserRouter>
+        </Layout>
   );
 }
 

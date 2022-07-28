@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { Card, Row, Col, Tag } from 'antd';
 import { Typography } from 'antd';
 import { useNavigate } from "react-router-dom";
