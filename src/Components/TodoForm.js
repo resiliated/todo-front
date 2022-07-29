@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Form, Input } from 'antd';
 import { Card} from 'antd';
+import '../App.less';
 
 export function TodoForm({onTodoCreation, onTodoEdition}) {
 
