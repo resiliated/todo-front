@@ -40,7 +40,6 @@ export function Todo({todo, onNextState, onTodoDeletion}){
       ]}
       >
       <Typography>
-        <Paragraph>{todo.content}</Paragraph>
         <Text strong>Créée le: {todo.creation}</Text>
       </Typography>
     </Card>
