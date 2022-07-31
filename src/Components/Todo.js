@@ -10,7 +10,7 @@ import {
 import TodoHelpers from '../TodoHelpers.js'
 
 
-const { Paragraph, Text } = Typography;
+const { Text } = Typography;
 
 export function Todo({todo, onNextState, onTodoDeletion}){
     let navigate = useNavigate();
@@ -31,10 +31,9 @@ export function Todo({todo, onNextState, onTodoDeletion}){
 
   return (
     <Card
-      style={{ margin: '0 0 12px 0' }}
-      title={<Row><Col span={21} >{todo.title}</Col><Col span={3} ><Tag color={TodoHelpers.getStateColor(todo)}>{TodoHelpers.getStateContent(todo)}</Tag></Col></Row>}
+      title={<Row><Col span={18}><Text ellipsis={true}>{todo.title}</Text></Col><Col span={6} ><Tag color={TodoHelpers.getStateColor(todo)}>{TodoHelpers.getStateContent(todo)}</Tag></Col></Row>}
       actions={[
-        <StepForwardOutlined onClick={handleNextState} className={"step-forward"}/>,
+        <StepForwardOutlined onClick={handleNextState}/>,
         <EditOutlined onClick={onEdit}/>,
         <DeleteOutlined onClick={handleTodoDeletion}/>
       ]}

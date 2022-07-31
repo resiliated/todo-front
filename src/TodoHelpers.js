@@ -1,6 +1,6 @@
 const TodoHelpers = {
     getPriority: function (todo){
-        var value = -1;
+        var value;
 
         switch (todo.state) {
           case "TODO":
@@ -13,6 +13,7 @@ const TodoHelpers = {
             value = 2;
             break;
           default:
+            value = -1;
             break;
         }
         return value;

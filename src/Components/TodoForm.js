@@ -4,6 +4,9 @@ import { Button, Form, Input } from 'antd';
 import { Card} from 'antd';
 import '../App.less';
 
+const { TextArea } = Input;
+
+
 export function TodoForm({onTodoCreation, onTodoEdition}) {
 
   let navigate = useNavigate();
@@ -16,8 +19,6 @@ export function TodoForm({onTodoCreation, onTodoEdition}) {
     }, [location, setTodo]);
 
   function handleTodoCreation(values){
-    console.log('Success:', values);
-
     if(todo === null){
         onTodoCreation(values.title, values.content);
     }else{
@@ -30,7 +31,7 @@ export function TodoForm({onTodoCreation, onTodoEdition}) {
   }
 
   function onFinishFailed(errorInfo){
-    console.log('Failed:', errorInfo);
+    console.error('Failed:', errorInfo);
   }
 
   return (
@@ -57,7 +58,7 @@ export function TodoForm({onTodoCreation, onTodoEdition}) {
             name="content"
             initialValue={todo ? todo.content : null}
         >
-          <Input rows={4} placeholder="Entrez le contenu de la todo" />
+          <TextArea rows={6} placeholder="Entrez le contenu de la todo" />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">{todo ? "Editer" : "Créer"}</Button>

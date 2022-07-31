@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Layout, Row, Col, Spin } from 'antd';
+import { Layout, Spin } from 'antd';
 import Menus from './Components/Menus.js';
 import TodoList from './Components/TodoList.js';
 import TodoForm from './Components/TodoForm.js';
 import './App.less';
 const { Header, Content, Footer } = Layout;
-
 
 export function App({URL_API}) {
   const [todos, setTodos] = useState([]);
@@ -66,7 +65,7 @@ export function App({URL_API}) {
     });
   }
 
-  //TODO create service to CRUD opartions
+  //TODO create service to CRUD operations
   function onTodoEdition(todoToUpdate){
     setIsLoaded(false);
     fetch(URL_API, {
@@ -99,41 +98,23 @@ export function App({URL_API}) {
 
   return (
     <Layout>
-        <BrowserRouter>
-            <Header style={{
-              background: 'inherit',
-              position: 'fixed',
-              zIndex: 1,
-              width: '100%',
-              top: 0,
-              padding: 0
-            }}>
-              <Row>
-                <Col span={22}><Menus /></Col>
-                <Col span={2} style={{background: 'white'}}><Spin className={isLoaded ? "hidden": ""} /></Col>
-              </Row>
-            </Header>
-
-            <Content style={{
-               padding: '82px 20px'
-             }}>
-              <Routes>
-                <Route path="/" element={<TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} title="Todo liste de Boris" todos={todos}/>} />
-                <Route path="/add" element={<TodoForm onTodoCreation={onTodoCreation} onTodoEdition={onTodoEdition}/>} />
-              </Routes>
-            </Content>
-            <Footer
-              style={{
-                textAlign: 'center',
-                position: 'fixed',
-                bottom: 0,
-                width: '100%'
-              }}
-            >
+        <Spin spinning={!isLoaded} tip="chargement...">
+            <BrowserRouter>
+                <Header>
+                    <Menus/>
+                </Header>
+                <Content>
+                  <Routes>
+                    <Route path="/" element={<TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} title="Todo liste de Boris" todos={todos}/>} />
+                    <Route path="/add" element={<TodoForm onTodoCreation={onTodoCreation} onTodoEdition={onTodoEdition}/>} />
+                  </Routes>
+                </Content>
+            </BrowserRouter>
+            <Footer>
               Boris Design ©2022 Created by me
             </Footer>
-        </BrowserRouter>
-        </Layout>
+        </Spin>
+    </Layout>
   );
 }
 

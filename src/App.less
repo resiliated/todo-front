@@ -1,19 +1,25 @@
 @import '~antd/dist/antd.less';
 
-body{
-  background: #ececec
-}
 
 .hidden{
-  display: none;
+display: none;
 }
 
 .visible{
-  display: block;
+display: block;
 }
 
-.site-page-header {
-  margin-bottom: 16px;
-  background: white;
-  border: 1px solid rgb(235, 237, 240);
+/** OVERRIDE ANTD **/
+.ant-layout-header{
+height: fit-content;
+width: 100%;
+padding: initial;
+position: fixed;
+top: 0;
+z-index: 1;
 }
+
+.ant-layout-content{
+padding: 100px 10px 0 10px;
+}
+

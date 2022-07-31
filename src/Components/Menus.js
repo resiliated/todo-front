@@ -35,7 +35,7 @@ export function Menus(){
     }
   ];
   return (
-    <Menu onSelect={onSelect} mode="horizontal" items={items} defaultSelectedKeys={["list"]} selectedKeys={[selectedKey]}/>
+    <Menu onSelect={onSelect} items={items} defaultSelectedKeys={["list"]} selectedKeys={[selectedKey]}/>
   )
 }
 
