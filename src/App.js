@@ -1,115 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Layout, Spin } from 'antd';
+import Login from './Components/Login.js';
 import Menus from './Components/Menus.js';
 import TodoList from './Components/TodoList.js';
 import TodoForm from './Components/TodoForm.js';
+import APIService from './APIService.js'
 import './App.less';
 const { Header, Content, Footer } = Layout;
 
 export function App({URL_API}) {
-  const [todos, setTodos] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+    const [userId, setUserId] = useState(null);
+    const [todos, setTodos] = useState([]);
+    const [todoToEdit, setTodoToEdit] = useState(null);
+    const [isLoaded, setIsLoaded] = useState(true);
+
+    let navigate = useNavigate();
+
+    const readTodos = useCallback((userId) => {
+        APIService.readAll(userId).then(todos => {
+            setTodos(todos);
+        });
+      },[setTodos]);
 
   useEffect(() => {
-    fetch(URL_API)
-      .then(res => res.json())
-      .then(
-        (todos) => {
-          setIsLoaded(true);
-          setTodos(todos);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      );
-  }, [URL_API, setError, setIsLoaded, setTodos]);
+    if(userId !== null){
+        readTodos(userId);
+        navigate("/list");
+    }
 
-  function onTodoCreation(title, content){
-    setIsLoaded(false);
-    fetch(URL_API, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title: title,
-        content: content,
-      })
-    }).then(res => res.json())
-      .then(
-        (createdTodo) => {
-          setIsLoaded(true);
-          setTodos(todos => [...todos, createdTodo]);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-    );
+
+  }, [userId, readTodos]);
+
+  function onLogin(userId){
+    setUserId(userId);
   }
 
-  function onTodoDeletion(todoToRemove){
-    setIsLoaded(false);
-    fetch(URL_API+"/"+todoToRemove.id, {
-      method: 'DELETE'
-    }).then((result)=>{
-      setTodos(todos.filter(todo =>{
-          return todo.id !== todoToRemove.id;
-        })
-      );
-      setIsLoaded(true);
+  function createTodo(todoToCreate){
+    todoToCreate.userId = userId;
+    APIService.create(todoToCreate).then(createdTodo => {
+        setTodos(todos => [...todos, createdTodo]);
+        navigate("/list");
     });
   }
 
-  //TODO create service to CRUD operations
-  function onTodoEdition(todoToUpdate){
-    setIsLoaded(false);
-    fetch(URL_API, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(todoToUpdate)
-    }).then(res => res.json())
-    .then(
-      (updatedTodo) => {
-        setIsLoaded(true);
-        setTodos(todos.filter(todo =>{
-            return todo.id !== updatedTodo.id;
-          })
-        );
-        setTodos(todos => [...todos, updatedTodo]);
-      },
-      (error) => {
-        setIsLoaded(true);
-        setError(error);
-      }
-    );
+  function updateTodo(todoToUpdate){
+    APIService.update(todoToUpdate).then(updatedTodo => {
+        var currentTodos = [...todos];
+        var index = currentTodos.findIndex(todo => todo.id === updatedTodo.id);
+        currentTodos[index] = updatedTodo;
+        setTodos(currentTodos);
+
+        if(todoToEdit !== null){
+            setTodoToEdit(null);
+            navigate("/list");
+        }
+    });
   }
 
-  function onNextState(todo){
-    onTodoEdition(todo);
+  function deleteTodo(todoTodoDelete){
+    APIService.delete(todoTodoDelete).then(response => {
+        setTodos([...todos].filter(todo =>{ return todo.id !== todoTodoDelete.id}));
+    });
+  }
+
+  function editTodo(todo){
+    setTodoToEdit(todo);
+    navigate("/add");
   }
 
   return (
     <Layout>
         <Spin spinning={!isLoaded} tip="chargement...">
-            <BrowserRouter>
-                <Header>
-                    <Menus/>
-                </Header>
-                <Content>
-                  <Routes>
-                    <Route path="/" element={<TodoList onTodoDeletion={onTodoDeletion} onNextState={onNextState} title="Todo liste de Boris" todos={todos}/>} />
-                    <Route path="/add" element={<TodoForm onTodoCreation={onTodoCreation} onTodoEdition={onTodoEdition}/>} />
-                  </Routes>
-                </Content>
-            </BrowserRouter>
+            <Header>
+                <Menus userId={userId} />
+            </Header>
+            <Content>
+              <Routes>
+                <Route path="/" element={<Login onLogin={onLogin}/>} />
+                <Route path="/list" element={<TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} editTodo={editTodo} title="Todo liste de Boris" />} />
+                <Route path="/add" element={<TodoForm createTodo={createTodo} updateTodo={updateTodo} todoToEdit={todoToEdit}/>} />
+              </Routes>
+            </Content>
             <Footer>
               Boris Design ©2022 Created by me
             </Footer>

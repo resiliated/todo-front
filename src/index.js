@@ -1,5 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+
 import './index.css';
 import App from './App.js';
 
@@ -7,5 +9,7 @@ const container = document.getElementById('root');
 const root = createRoot(container);
 
 root.render(
-  <App URL_API={"http://localhost:8080/todo"}/>
+    <BrowserRouter>
+        <App/>
+    </BrowserRouter>
 );

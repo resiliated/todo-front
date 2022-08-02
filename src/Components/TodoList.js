@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { Radio, PageHeader, Space, List, Tag } from 'antd';
 import Todo from './Todo.js'
 import TodoHelpers from '../TodoHelpers.js'
 
-export function TodoList({todos, onTodoDeletion, onNextState, onReset}) {
+export function TodoList({todos, updateTodo, deleteTodo, editTodo}) {
 
-    const [value, setValue] = useState(TodoHelpers.getPriority({state: "ALL"}));
+    const [filter, setFilter] = useState(TodoHelpers.getPriority({state: "ALL"}));
 
-    function onChange(e){
-        setValue(e.target.value);
+    function onTodoUpdate(todoToUpdate){
+        updateTodo(todoToUpdate);
+    }
+
+    function onTodoDelete(todoToDelete){
+        deleteTodo(todoToDelete);
+    }
+
+    function onTodoEdit(todoToEdit){
+        editTodo(todoToEdit);
+    }
+
+    function onChangeFilter(e){
+        setFilter(e.target.value);
     }
 
     return(
@@ -17,9 +29,8 @@ export function TodoList({todos, onTodoDeletion, onNextState, onReset}) {
               title="Status todo"
               subTitle=""
               className="site-page-header"
-
             >
-                <Radio.Group key="1" onChange={onChange} value={value}>
+                <Radio.Group key="1" onChange={onChangeFilter} value={filter}>
                     <Space direction="vertical">
                         <Radio key="10" value={TodoHelpers.getPriority({state: "ALL"})}>Tout ({todos.length})</Radio>
                         <Radio key="11" value={TodoHelpers.getPriority({state: "TODO"})}><Tag color={TodoHelpers.getStateColor({state: 'TODO'})}>{TodoHelpers.getStateContent({state: 'TODO'})}</Tag> ({todos.filter(todo => todo.state === "TODO" ).length} / {todos.length})</Radio>
@@ -38,10 +49,10 @@ export function TodoList({todos, onTodoDeletion, onNextState, onReset}) {
                   xl: 3,
                   xxl: 3,
                 }}
-                dataSource={todos.sort((a,b) => TodoHelpers.getPriority(a) - TodoHelpers.getPriority(b) ).filter(todo => TodoHelpers.getPriority(todo) === value || value === TodoHelpers.getPriority({state: todo}))}
+                dataSource={todos.sort((a,b) => TodoHelpers.getPriority(a) - TodoHelpers.getPriority(b) ).filter(todo => TodoHelpers.getPriority(todo) === filter || filter === TodoHelpers.getPriority({state: todo}))}
                     renderItem={(todo) => (
                         <List.Item>
-                            <Todo onTodoDeletion={onTodoDeletion} onNextState={onNextState} onReset={onReset} key={todo.id} todo={todo}/>
+                            <Todo onTodoUpdate={onTodoUpdate} onTodoDelete={onTodoDelete} onTodoEdit={onTodoEdit} key={todo.id} todo={todo}/>
                         </List.Item>
                      )}
                 />

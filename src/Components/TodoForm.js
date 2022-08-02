@@ -1,34 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
+import React from 'react';
 import { Button, Form, Input } from 'antd';
 import { Card} from 'antd';
 import '../App.less';
-
+import APIService from '../APIService.js'
 const { TextArea } = Input;
 
 
-export function TodoForm({onTodoCreation, onTodoEdition}) {
+export function TodoForm({createTodo, updateTodo, todoToEdit}) {
 
-  let navigate = useNavigate();
-  let location = useLocation();
-
-  let [todo, setTodo] = useState(location.state);
-
-  useEffect(() => {
-       setTodo(location.state);
-    }, [location, setTodo]);
-
-  function handleTodoCreation(values){
-    if(todo === null){
-        onTodoCreation(values.title, values.content);
-    }else{
-        todo.title = values.title;
-        todo.content = values.content;
-        onTodoEdition(todo);
+    function handleTodoCreation(values){
+        if(todoToEdit === null){
+            createTodo({title: values.title, content: values.content});
+        }else{
+            todoToEdit.title = values.title;
+            todoToEdit.content = values.content;
+            updateTodo(todoToEdit);
+        }
     }
-
-    navigate("/");
-  }
 
   function onFinishFailed(errorInfo){
     console.error('Failed:', errorInfo);
@@ -43,7 +31,7 @@ export function TodoForm({onTodoCreation, onTodoEdition}) {
         <Form.Item
             label="Titre"
             name="title"
-            initialValue= {todo ? todo.title : null}
+            initialValue= {todoToEdit ? todoToEdit.title : null}
             rules={[
               {
                 required: true,
@@ -56,12 +44,12 @@ export function TodoForm({onTodoCreation, onTodoEdition}) {
         <Form.Item
             label="Contenu"
             name="content"
-            initialValue={todo ? todo.content : null}
+            initialValue={todoToEdit ? todoToEdit.content : null}
         >
           <TextArea rows={6} placeholder="Entrez le contenu de la todo" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">{todo ? "Editer" : "Créer"}</Button>
+          <Button type="primary" htmlType="submit">{todoToEdit ? "Editer" : "Créer"}</Button>
         </Form.Item>
       </Form>
     </Card>

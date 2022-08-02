@@ -1,15 +1,41 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { UnorderedListOutlined, DiffOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, DiffOutlined, LoginOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu } from 'antd';
 
-export function Menus(){
+export function Menus({userId}){
 
   let navigate = useNavigate();
   let location = useLocation();
+
   const getSelectedKey = useCallback(() =>{
-      return location.pathname === "/" ? "list" : "add";
-    }, [location]);
+          var selectedKey;
+          switch(location.pathname){
+              case "/":
+              selectedKey = "login";
+              break;
+
+              case "/list":
+              selectedKey = "list";
+              break;
+
+              case "/add":
+              selectedKey = "add";
+              break;
+
+              default:
+              break;
+          }
+        return selectedKey;
+      }, [location]);
+
+  useEffect(()=>{
+     //navigate(getSelectedKey());
+
+    }, [navigate, getSelectedKey]);
+
+
+
   const [selectedKey, setSelectedKey] = useState(getSelectedKey())
 
   useEffect(() => {
@@ -22,20 +48,28 @@ export function Menus(){
 
   const items = [
     {
-      "key": "list",
-      "icon": <UnorderedListOutlined />,
-      "label": "Liste des todos",
-      "location": "/"
+        "key": "login",
+        "icon": <LoginOutlined />,
+        "label": "Login",
+        "location": "/"
     },
     {
-      "key": "add",
-      "icon": <DiffOutlined />,
-      "label": "Ajouter une todo",
-      "location": "/add"
+        "key": "list",
+        "icon": <UnorderedListOutlined />,
+        "label": "Liste des todos",
+        "location": "/list",
+        "disabled": userId == null ? true: false
+    },
+    {
+        "key": "add",
+        "icon": <DiffOutlined />,
+        "label": "Ajouter une todo",
+        "location": "/add",
+        "disabled": userId == null ? true: false
     }
   ];
   return (
-    <Menu onSelect={onSelect} items={items} defaultSelectedKeys={["list"]} selectedKeys={[selectedKey]}/>
+    <Menu onSelect={onSelect} items={items} defaultSelectedKeys={["login"]} selectedKeys={[selectedKey]}/>
   )
 }
 
