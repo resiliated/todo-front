@@ -23,71 +23,71 @@ export function App({URL_API}) {
         });
       },[setTodos]);
 
-  useEffect(() => {
-    if(userId !== null){
-        readTodos(userId);
-    }
-  }, [userId, readTodos]);
-
-  function onLogin(ids){
-    APIService.login(ids.username, ids.password).then(user => {
-        setUserId(user.id);
-        navigate("/list");
-    });
-  }
-
-  function createTodo(todoToCreate){
-    todoToCreate.userId = userId;
-    APIService.create(todoToCreate).then(createdTodo => {
-        setTodos(todos => [...todos, createdTodo]);
-        navigate("/list");
-    });
-  }
-
-  function updateTodo(todoToUpdate){
-    APIService.update(todoToUpdate).then(updatedTodo => {
-        var currentTodos = [...todos];
-        var index = currentTodos.findIndex(todo => todo.id === updatedTodo.id);
-        currentTodos[index] = updatedTodo;
-        setTodos(currentTodos);
-
-        if(todoToEdit !== null){
-            setTodoToEdit(null);
-            navigate("/list");
+    useEffect(() => {
+        if(userId !== null){
+            readTodos(userId);
         }
-    });
-  }
+    }, [userId, readTodos]);
 
-  function deleteTodo(todoTodoDelete){
-    APIService.delete(todoTodoDelete).then(response => {
-        setTodos([...todos].filter(todo =>{ return todo.id !== todoTodoDelete.id}));
-    });
-  }
+    function onLogin(ids){
+        APIService.login(ids.username, ids.password).then(user => {
+            setUserId(user.id);
+            navigate("/list");
+        });
+    }
 
-  function editTodo(todo){
-    setTodoToEdit(todo);
-    navigate("/add");
-  }
+    function createTodo(todoToCreate){
+        todoToCreate.userId = userId;
+        APIService.create(todoToCreate).then(createdTodo => {
+            setTodos(todos => [...todos, createdTodo]);
+            navigate("/list");
+        });
+    }
 
-  return (
-    <Layout>
-        <Spin spinning={!isLoaded} tip="chargement...">
-            <Header>
-                <Menus userId={userId} />
-            </Header>
-            <Content>
-              <Routes>
-                <Route path="/" element={<Login onLogin={onLogin}/>} />
-                <Route path="/list" element={<TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} editTodo={editTodo} title="Todo liste de Boris" />} />
-                <Route path="/add" element={<TodoForm createTodo={createTodo} updateTodo={updateTodo} todoToEdit={todoToEdit}/>} />
-              </Routes>
-            </Content>
-            <Footer>
-              Boris Design ©2022 Created by me
-            </Footer>
-        </Spin>
-    </Layout>
-  );
+    function updateTodo(todoToUpdate){
+        APIService.update(todoToUpdate).then(updatedTodo => {
+            var currentTodos = [...todos];
+            var index = currentTodos.findIndex(todo => todo.id === updatedTodo.id);
+            currentTodos[index] = updatedTodo;
+            setTodos(currentTodos);
+
+            if(todoToEdit !== null){
+                setTodoToEdit(null);
+                navigate("/list");
+            }
+        });
+    }
+
+    function deleteTodo(todoTodoDelete){
+        APIService.delete(todoTodoDelete).then(response => {
+            setTodos([...todos].filter(todo =>{ return todo.id !== todoTodoDelete.id}));
+        });
+    }
+
+    function editTodo(todo){
+        setTodoToEdit(todo);
+        navigate("/add");
+    }
+
+    return (
+        <Layout>
+            <Spin spinning={!isLoaded} tip="chargement...">
+                <Header>
+                    <Menus userId={userId !== null ? true : false} />
+                </Header>
+                <Content>
+                  <Routes>
+                    <Route path="/" element={<Login onLogin={onLogin}/>} />
+                    <Route path="/list" element={<TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} editTodo={editTodo} title="Todo liste de Boris" />} />
+                    <Route path="/add" element={<TodoForm createTodo={createTodo} updateTodo={updateTodo} todoToEdit={todoToEdit}/>} />
+                  </Routes>
+                </Content>
+                <Footer>
+                  Boris Design ©2022 Created by me
+                </Footer>
+            </Spin>
+        </Layout>
+    );
 }
 
 export default App;

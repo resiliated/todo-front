@@ -3,74 +3,65 @@ import { UnorderedListOutlined, DiffOutlined, LoginOutlined } from '@ant-design/
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu } from 'antd';
 
-export function Menus({userId}){
+export function Menus({authorized}){
 
-  let navigate = useNavigate();
-  let location = useLocation();
+    let navigate = useNavigate();
+    let location = useLocation();
+    const getSelectedKey = useCallback(() =>{
+        var selectedKey;
+        switch(location.pathname){
+            case "/":
+            selectedKey = "login";
+            break;
 
-  const getSelectedKey = useCallback(() =>{
-          var selectedKey;
-          switch(location.pathname){
-              case "/":
-              selectedKey = "login";
-              break;
+            case "/list":
+            selectedKey = "list";
+            break;
 
-              case "/list":
-              selectedKey = "list";
-              break;
+            case "/add":
+            selectedKey = "add";
+            break;
 
-              case "/add":
-              selectedKey = "add";
-              break;
-
-              default:
-              break;
-          }
+            default:
+            break;
+        }
         return selectedKey;
-      }, [location]);
+    }, [location]);
+    const [selectedKey, setSelectedKey] = useState(getSelectedKey());
 
-  useEffect(()=>{
-     //navigate(getSelectedKey());
+    useEffect(() => {
+        setSelectedKey(getSelectedKey());
+    }, [setSelectedKey, getSelectedKey]);
 
-    }, [navigate, getSelectedKey]);
-
-
-
-  const [selectedKey, setSelectedKey] = useState(getSelectedKey())
-
-  useEffect(() => {
-     setSelectedKey(getSelectedKey());
-  }, [setSelectedKey, getSelectedKey]);
-
-  function onSelect(e){
-    navigate(e.item.props.location);
-  }
-
-  const items = [
-    {
-        "key": "login",
-        "icon": <LoginOutlined />,
-        "label": "Login",
-        "location": "/"
-    },
-    {
-        "key": "list",
-        "icon": <UnorderedListOutlined />,
-        "label": "Liste des todos",
-        "location": "/list",
-        "disabled": userId == null ? true: false
-    },
-    {
-        "key": "add",
-        "icon": <DiffOutlined />,
-        "label": "Ajouter une todo",
-        "location": "/add",
-        "disabled": userId == null ? true: false
+    function onSelect(e){
+        navigate(e.item.props.location);
     }
-  ];
-  return (
-    <Menu onSelect={onSelect} items={items} defaultSelectedKeys={["login"]} selectedKeys={[selectedKey]}/>
-  )
+
+    const items = [
+        {
+            "key": "login",
+            "icon": <LoginOutlined />,
+            "label": "Login",
+            "location": "/"
+        },
+        {
+            "key": "list",
+            "icon": <UnorderedListOutlined />,
+            "label": "Liste des todos",
+            "location": "/list",
+            "disabled": authorized
+        },
+        {
+            "key": "add",
+            "icon": <DiffOutlined />,
+            "label": "Ajouter une todo",
+            "location": "/add",
+            "disabled": authorized
+        }
+    ];
+    return (
+        <Menu onSelect={onSelect} items={items} defaultSelectedKeys={["login"]} selectedKeys={[selectedKey]}/>
+    )
 }
 
 export default Menus;
