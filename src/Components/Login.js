@@ -11,12 +11,6 @@ export function Login({onLogin}){
         <Layout>
             <Form
                 name="basic"
-                labelCol={{
-                    span: 8,
-                }}
-                wrapperCol={{
-                    span: 16,
-                }}
                 initialValues={{
                     remember: true,
                 }}
@@ -49,23 +43,11 @@ export function Login({onLogin}){
                     <Input.Password />
                 </Form.Item>
 
-                <Form.Item
-                    name="remember"
-                    valuePropName="checked"
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}
-                >
+                <Form.Item name="remember" valuePropName="checked"s>
                     <Checkbox>Remember me</Checkbox>
                 </Form.Item>
 
-                <Form.Item
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}
-                >
+                <Form.Item>
                     <Button type="primary" htmlType="submit">Submit</Button>
                 </Form.Item>
             </Form>
