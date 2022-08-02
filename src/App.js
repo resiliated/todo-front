@@ -30,21 +30,26 @@ export function App({URL_API}) {
     }, [userId, readTodos]);
 
     function onLogin(ids){
+        setIsLoaded(false);
         APIService.login(ids.username, ids.password).then(user => {
             setUserId(user.id);
             navigate("/list");
+            setIsLoaded(true);
         });
     }
 
     function createTodo(todoToCreate){
         todoToCreate.userId = userId;
+        setIsLoaded(false);
         APIService.create(todoToCreate).then(createdTodo => {
             setTodos(todos => [...todos, createdTodo]);
             navigate("/list");
+            setIsLoaded(true);
         });
     }
 
     function updateTodo(todoToUpdate){
+        setIsLoaded(false);
         APIService.update(todoToUpdate).then(updatedTodo => {
             var currentTodos = [...todos];
             var index = currentTodos.findIndex(todo => todo.id === updatedTodo.id);
@@ -54,13 +59,16 @@ export function App({URL_API}) {
             if(todoToEdit !== null){
                 setTodoToEdit(null);
                 navigate("/list");
+                setIsLoaded(true);
             }
         });
     }
 
     function deleteTodo(todoTodoDelete){
+        setIsLoaded(false);
         APIService.delete(todoTodoDelete).then(response => {
             setTodos([...todos].filter(todo =>{ return todo.id !== todoTodoDelete.id}));
+            setIsLoaded(true);
         });
     }
 
