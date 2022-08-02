@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Form, Input } from 'antd';
 import { Card} from 'antd';
 import '../App.less';
-import APIService from '../APIService.js'
 const { TextArea } = Input;
 
 

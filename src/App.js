@@ -26,14 +26,14 @@ export function App({URL_API}) {
   useEffect(() => {
     if(userId !== null){
         readTodos(userId);
-        navigate("/list");
     }
-
-
   }, [userId, readTodos]);
 
-  function onLogin(userId){
-    setUserId(userId);
+  function onLogin(ids){
+    APIService.login(ids.username, ids.password).then(user => {
+        setUserId(user.id);
+        navigate("/list");
+    });
   }
 
   function createTodo(todoToCreate){

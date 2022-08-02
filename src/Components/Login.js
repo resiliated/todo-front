@@ -4,22 +4,7 @@ import { Button, Form, Input, Checkbox, Layout } from 'antd';
 export function Login({onLogin}){
 
     function onFinish(values){
-        fetch("http://localhost:8080/login", {
-            method: 'POST',
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({name: values.username,password: values.password,})
-            })
-            .then(res => res.json())
-            .then(
-            (user) => {
-                onLogin(user.id);
-            },
-            (error) => {
-            }
-        );
+        onLogin(values);
     }
 
     function onFinishFailed(errorInfo){
