@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Form, Input, Checkbox, Layout } from 'antd';
+import { Button, Form, Input, Checkbox, Layout, Alert } from 'antd';
 
-export function Login({onLogin}){
+export function Login({onLogin, error}){
 
     function onFinish(values){
         onLogin(values);
@@ -24,7 +24,7 @@ export function Login({onLogin}){
                         {
                             required: true,
                             message: 'Please input your username!',
-                        },
+                        }
                     ]}
                  >
                     <Input />
@@ -36,14 +36,14 @@ export function Login({onLogin}){
                     rules={[
                         {
                         required: true,
-                        message: 'Please input your password!',
-                        },
+                        message: 'Please input your password!'
+                        }
                     ]}
                 >
                     <Input.Password />
                 </Form.Item>
 
-                <Form.Item name="remember" valuePropName="checked"s>
+                <Form.Item name="remember" valuePropName="checked">
                     <Checkbox>Remember me</Checkbox>
                 </Form.Item>
 
@@ -51,9 +51,9 @@ export function Login({onLogin}){
                     <Button type="primary" htmlType="submit">Submit</Button>
                 </Form.Item>
             </Form>
+            {error !== null ? <Alert message={error !==null ? error.message : ""} type="error" showIcon /> :null}
         </Layout>
     );
-
 }
 
 export default Login;

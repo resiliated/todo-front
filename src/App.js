@@ -9,17 +9,20 @@ import APIService from './APIService.js'
 import './App.less';
 const { Header, Content, Footer } = Layout;
 
-export function App({URL_API}) {
+export function App() {
     const [userId, setUserId] = useState(null);
     const [todos, setTodos] = useState([]);
     const [todoToEdit, setTodoToEdit] = useState(null);
     const [isLoaded, setIsLoaded] = useState(true);
+    const [error, setError] = useState(null);
 
     let navigate = useNavigate();
 
     const readTodos = useCallback((userId) => {
+        setIsLoaded(false);
         APIService.readAll(userId).then(todos => {
             setTodos(todos);
+            setIsLoaded(true);
         });
       },[setTodos]);
 
@@ -31,10 +34,15 @@ export function App({URL_API}) {
 
     function onLogin(ids){
         setIsLoaded(false);
-        APIService.login(ids.username, ids.password).then(user => {
-            setUserId(user.id);
-            navigate("/list");
-            setIsLoaded(true);
+        APIService.login(ids.username, ids.password).then((user) => {
+            if(user.unauthorized){
+                setIsLoaded(true);
+                setError(user);
+            }else{
+                setUserId(user.id);
+                navigate("/list");
+                setIsLoaded(true);
+            }
         });
     }
 
@@ -59,8 +67,9 @@ export function App({URL_API}) {
             if(todoToEdit !== null){
                 setTodoToEdit(null);
                 navigate("/list");
-                setIsLoaded(true);
             }
+
+            setIsLoaded(true);
         });
     }
 
@@ -81,11 +90,11 @@ export function App({URL_API}) {
         <Layout>
             <Spin spinning={!isLoaded} tip="chargement...">
                 <Header>
-                    <Menus userId={userId !== null ? true : false} />
+                    <Menus authorized={userId !== null ? true : false} />
                 </Header>
                 <Content>
                   <Routes>
-                    <Route path="/" element={<Login onLogin={onLogin}/>} />
+                    <Route path="/" element={<Login onLogin={onLogin} error={error}/>} />
                     <Route path="/list" element={<TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} editTodo={editTodo} title="Todo liste de Boris" />} />
                     <Route path="/add" element={<TodoForm createTodo={createTodo} updateTodo={updateTodo} todoToEdit={todoToEdit}/>} />
                   </Routes>

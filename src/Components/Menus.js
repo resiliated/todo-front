@@ -49,14 +49,14 @@ export function Menus({authorized}){
             "icon": <UnorderedListOutlined />,
             "label": "Liste des todos",
             "location": "/list",
-            "disabled": authorized
+            "disabled": !authorized
         },
         {
             "key": "add",
             "icon": <DiffOutlined />,
             "label": "Ajouter une todo",
             "location": "/add",
-            "disabled": authorized
+            "disabled": !authorized
         }
     ];
     return (
