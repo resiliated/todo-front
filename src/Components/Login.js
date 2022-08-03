@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, Input, Checkbox, Layout, Alert } from 'antd';
 
-export function Login({onLogin, error}){
+export function Login({onLogin, isConnected, error}){
 
     function onFinish(values){
         onLogin(values);

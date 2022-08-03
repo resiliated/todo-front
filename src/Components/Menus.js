@@ -1,47 +1,37 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { UnorderedListOutlined, DiffOutlined, LoginOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, DiffOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu } from 'antd';
+import TodoHelpers from '../TodoHelpers.js'
 
-export function Menus({authorized}){
+
+export function Menus({isConnected, onNav, onLogout}){
 
     let navigate = useNavigate();
     let location = useLocation();
     const getSelectedKey = useCallback(() =>{
-        var selectedKey;
-        switch(location.pathname){
-            case "/":
-            selectedKey = "login";
-            break;
-
-            case "/list":
-            selectedKey = "list";
-            break;
-
-            case "/add":
-            selectedKey = "add";
-            break;
-
-            default:
-            break;
-        }
-        return selectedKey;
+        return TodoHelpers.findKeyFromPath(location.pathname);
     }, [location]);
     const [selectedKey, setSelectedKey] = useState(getSelectedKey());
 
     useEffect(() => {
-        setSelectedKey(getSelectedKey());
-    }, [setSelectedKey, getSelectedKey]);
+        setSelectedKey(getSelectedKey(location));
+    }, [setSelectedKey, getSelectedKey, location]);
+
 
     function onSelect(e){
+        onNav();
+        if(isConnected && TodoHelpers.findKeyFromPath(e.item.props.location) === "login"){
+            onLogout();
+        }
         navigate(e.item.props.location);
     }
 
     const items = [
         {
             "key": "login",
-            "icon": <LoginOutlined />,
-            "label": "Login",
+            "icon": isConnected ? <LogoutOutlined /> : <LoginOutlined />,
+            "label": isConnected ? "Se déconnecter" :"Se connecter",
             "location": "/"
         },
         {
@@ -49,14 +39,14 @@ export function Menus({authorized}){
             "icon": <UnorderedListOutlined />,
             "label": "Liste des todos",
             "location": "/list",
-            "disabled": !authorized
+            "disabled": !isConnected
         },
         {
             "key": "add",
             "icon": <DiffOutlined />,
             "label": "Ajouter une todo",
             "location": "/add",
-            "disabled": !authorized
+            "disabled": !isConnected
         }
     ];
     return (

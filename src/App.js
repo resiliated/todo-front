@@ -14,6 +14,7 @@ export function App() {
     const [todos, setTodos] = useState([]);
     const [todoToEdit, setTodoToEdit] = useState(null);
     const [isLoaded, setIsLoaded] = useState(true);
+    const [isConnected, setIsConnected] = useState(false);
     const [error, setError] = useState(null);
 
     let navigate = useNavigate();
@@ -32,6 +33,18 @@ export function App() {
         }
     }, [userId, readTodos]);
 
+    function onNav(){
+        setTodoToEdit(null);
+    }
+
+    function onLogout(){
+        setUserId(null);
+        setTodos([]);
+        setIsLoaded(true);
+        setIsConnected(false);
+        setTodoToEdit(null);
+    }
+
     function onLogin(ids){
         setIsLoaded(false);
         APIService.login(ids.username, ids.password).then((user) => {
@@ -41,6 +54,7 @@ export function App() {
             }else{
                 setUserId(user.id);
                 navigate("/list");
+                setIsConnected(true);
                 setIsLoaded(true);
             }
         });
@@ -90,17 +104,17 @@ export function App() {
         <Layout>
             <Spin spinning={!isLoaded} tip="chargement...">
                 <Header>
-                    <Menus authorized={userId !== null ? true : false} />
+                    <Menus onLogout={onLogout} onNav={onNav} isConnected={isConnected} />
                 </Header>
                 <Content>
-                  <Routes>
-                    <Route path="/" element={<Login onLogin={onLogin} error={error}/>} />
-                    <Route path="/list" element={<TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} editTodo={editTodo} title="Todo liste de Boris" />} />
-                    <Route path="/add" element={<TodoForm createTodo={createTodo} updateTodo={updateTodo} todoToEdit={todoToEdit}/>} />
-                  </Routes>
+                    <Routes>
+                        <Route path="/" element={<Login onLogin={onLogin} isConnected={isConnected} error={error}/>} />
+                        <Route path="/list" element={<TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} editTodo={editTodo} title="Todo liste de Boris" />} />
+                        <Route path="/add" element={<TodoForm createTodo={createTodo} updateTodo={updateTodo} todoToEdit={todoToEdit}/>} />
+                    </Routes>
                 </Content>
                 <Footer>
-                  Boris Design ©2022 Created by me
+                    Boris Design ©2022 Created by me
                 </Footer>
             </Spin>
         </Layout>

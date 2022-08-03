@@ -70,6 +70,27 @@ const TodoHelpers = {
                 break;
         }
         return content;
+    },
+
+    findKeyFromPath: function(path){
+        var selectedKey;
+        switch(path){
+            case "/":
+            selectedKey = "login";
+            break;
+
+            case "/list":
+            selectedKey = "list";
+            break;
+
+            case "/add":
+            selectedKey = "add";
+            break;
+
+            default:
+            break;
+        }
+        return selectedKey;
     }
 }
 
