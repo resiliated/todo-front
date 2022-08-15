@@ -36,7 +36,7 @@ const APIService = {
         return fetch(TODO_API+"/"+todoToDelete.id, {
             method: 'DELETE',
             headers: DEFAULT_HEADERS
-        }).then(res => res.json());
+        }).then();
     },
 
     /*** LOGIN OPERATIONS ***/
