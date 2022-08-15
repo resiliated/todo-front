@@ -3,7 +3,7 @@ DEFAULT_HEADERS = {
   'Accept': 'application/json',
   'Content-Type': 'application/json',
 },
-BASE_URL = "http://127.0.0.1:8080",
+BASE_URL = "http://localhost:8080",
 TODO_API = BASE_URL + "/api",
 LOGIN_API = TODO_API + "/users/login";
 
@@ -25,8 +25,8 @@ const APIService = {
     },
 
     update: function(todoToUpdate){
-        return fetch(TODO_API, {
-            method: 'PUT',
+        return fetch(TODO_API + "/" + todoToUpdate.id, {
+            method: 'PATCH',
             headers: DEFAULT_HEADERS,
             body: JSON.stringify(todoToUpdate)
         }).then(res => res.json());

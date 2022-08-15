@@ -2,14 +2,14 @@ const TodoHelpers = {
     getPriority: function (todo){
         var value;
 
-        switch (todo.state) {
-          case "TODO":
+        switch (todo.status) {
+          case 0:
             value = 0;
             break;
-          case "PROGRESS":
+          case 1:
             value = 1;
             break;
-          case "DONE":
+          case 2:
             value = 2;
             break;
           default:
@@ -20,15 +20,15 @@ const TodoHelpers = {
     },
 
     setNextState: function(todo){
-      switch (todo.state) {
-        case "TODO":
-          todo.state = "PROGRESS";
+      switch (todo.status) {
+        case 0:
+          todo.status = 1;
           break;
-        case "PROGRESS":
-          todo.state = "DONE";
+        case 1:
+          todo.status = 2;
           break;
-        case "DONE":
-          todo.state = "TODO";
+        case 2:
+          todo.status = 0;
           break;
         default:
           break;
@@ -38,14 +38,14 @@ const TodoHelpers = {
 
     getStateColor: function(todo){
       var color;
-      switch (todo.state) {
-        case "TODO":
+      switch (todo.status) {
+        case 0:
           color = "red";
           break;
-        case "PROGRESS":
+        case 1:
           color = "volcano";
           break;
-        case "DONE":
+        case 2:
           color = "green";
           break;
         default:
@@ -56,14 +56,14 @@ const TodoHelpers = {
 
     getStateContent: function(todo){
         var content;
-        switch (todo.state) {
-            case "TODO":
+        switch (todo.status) {
+            case 0:
                 content = "A faire";
                 break;
-            case "PROGRESS":
+            case 1:
                 content = "En cours";
                 break;
-            case "DONE":
+            case 2:
                 content = "Fait";
                 break;
             default:
