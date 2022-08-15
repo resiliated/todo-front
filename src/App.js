@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Layout, Spin } from 'antd';
 import Login from './Components/Login.js';
@@ -10,7 +10,6 @@ import './App.less';
 const { Header, Content, Footer } = Layout;
 
 export function App() {
-    const [userId, setUserId] = useState(null);
     const [todos, setTodos] = useState([]);
     const [todoToEdit, setTodoToEdit] = useState(null);
     const [isLoaded, setIsLoaded] = useState(true);
@@ -19,26 +18,19 @@ export function App() {
 
     let navigate = useNavigate();
 
-    const readTodos = useCallback((userId) => {
+    function readTodos() {
         setIsLoaded(false);
-        APIService.readAll(userId).then(todos => {
+        APIService.readAll().then(todos => {
             setTodos(todos);
             setIsLoaded(true);
         });
-      },[setTodos]);
-
-    useEffect(() => {
-        if(userId !== null){
-            readTodos(userId);
-        }
-    }, [userId, readTodos]);
+    }
 
     function onNav(){
         setTodoToEdit(null);
     }
 
     function onLogout(){
-        setUserId(null);
         setTodos([]);
         setIsLoaded(true);
         setIsConnected(false);
@@ -52,8 +44,8 @@ export function App() {
                 setIsLoaded(true);
                 setError(user);
             }else{
-                setUserId(user.id);
                 navigate("/list");
+                readTodos()
                 setIsConnected(true);
                 setIsLoaded(true);
             }
@@ -61,7 +53,7 @@ export function App() {
     }
 
     function createTodo(todoToCreate){
-        todoToCreate.userId = userId;
+        //todoToCreate.userId = userId;
         setIsLoaded(false);
         APIService.create(todoToCreate).then(createdTodo => {
             setTodos(todos => [...todos, createdTodo]);

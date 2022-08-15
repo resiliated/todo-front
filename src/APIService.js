@@ -3,9 +3,9 @@ DEFAULT_HEADERS = {
   'Accept': 'application/json',
   'Content-Type': 'application/json',
 },
-BASE_URL = "http://localhost:8080",
-TODO_API = BASE_URL + "/todo",
-LOGIN_API = BASE_URL + "/login";
+BASE_URL = "http://127.0.0.1:8080",
+TODO_API = BASE_URL + "/api",
+LOGIN_API = TODO_API + "/users/login";
 
 const APIService = {
     /*** CRUD OPERATIONS ***/
@@ -17,8 +17,8 @@ const APIService = {
         }).then(res => res.json());
     },
 
-    readAll: function(userId) {
-        return fetch(TODO_API+"/user/"+userId, {
+    readAll: function() {
+        return fetch(TODO_API, {
             method: 'GET',
             headers: DEFAULT_HEADERS
         }).then(res => res.json());
@@ -41,10 +41,10 @@ const APIService = {
 
     /*** LOGIN OPERATIONS ***/
     login: function(username, password){
+        DEFAULT_HEADERS['Authorization'] = 'Basic ' + window.btoa(username+':'+password);
         return fetch(LOGIN_API, {
-            method: 'POST',
-            headers: DEFAULT_HEADERS,
-            body: JSON.stringify({name: username, password: password})
+            method: 'GET',
+            headers: DEFAULT_HEADERS
         }).then(res => res.json());
     }
 };
