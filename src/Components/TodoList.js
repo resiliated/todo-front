@@ -40,6 +40,7 @@ export function TodoList({todos, updateTodo, deleteTodo, editTodo}) {
                 </Radio.Group>
             </PageHeader>
             <List
+                style={{marginBottom: 100}}
                 grid={{
                   gutter: 24,
                   xs: 1,
