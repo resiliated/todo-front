@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Layout, Spin } from 'antd';
-import Login from './Components/Login.js';
 import Menus from './Components/Menus.js';
-import TodoList from './Components/TodoList.js';
-import TodoForm from './Components/TodoForm.js';
 import APIService from './APIService.js'
 import './App.less';
 const { Header, Content, Footer } = Layout;
+
+const TodoList = React.lazy(() => import('./Components/TodoList.js'));
+const Login = React.lazy(() => import('./Components/Login.js'));
+const TodoForm = React.lazy(() => import('./Components/TodoForm.js'));
 
 export function App() {
     const [todos, setTodos] = useState([]);
@@ -100,9 +101,9 @@ export function App() {
                 </Header>
                 <Content>
                     <Routes>
-                        <Route path="/" element={<Login onLogin={onLogin} isConnected={isConnected} error={error}/>} />
-                        <Route path="/list" element={<TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} editTodo={editTodo} title="Todo liste de Boris" />} />
-                        <Route path="/add" element={<TodoForm createTodo={createTodo} updateTodo={updateTodo} todoToEdit={todoToEdit}/>} />
+                        <Route path="/" element={<Suspense fallback={<>...</>}> <Login onLogin={onLogin} isConnected={isConnected} error={error}/> </Suspense>} />
+                        <Route path="/list" element={<Suspense fallback={<>...</>}><TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} editTodo={editTodo} title="Todo liste de Boris" /></Suspense>} />
+                        <Route path="/add" element={<Suspense fallback={<>...</>}><TodoForm createTodo={createTodo} updateTodo={updateTodo} todoToEdit={todoToEdit}/></Suspense>} />
                     </Routes>
                 </Content>
                 <Footer>

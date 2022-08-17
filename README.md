@@ -1,5 +1,32 @@
-### `yarn start`
+# Todo app front end with React and Antd
 
-### `yarn test`
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/cescoffier/quarkus-todo-app/Build)
 
-### `yarn run build`
+## Development
+
+Install:
+
+```bash
+yarn install
+```
+
+Run:
+
+```bash
+yarn start
+```
+
+Open: http://localhost:3000/
+
+## Production
+
+Build docker image:
+
+```bash
+docker build -t todo-front:prod .
+```
+
+Run docker image:
+```bash
+docker run -p 3000:3000 todo:prod
+```
