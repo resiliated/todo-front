@@ -1,14 +1,10 @@
-FROM node:18-alpine AS development
-ENV NODE_ENV development
-# Add a work directory
+FROM node:18-alpine as build
 WORKDIR /app
-# Cache and Install dependencies
-COPY package.json .
-COPY yarn.lock .
-RUN yarn install
-# Copy app files
+COPY package.json ./
+COPY yarn.lock ./
+RUN yarn install --frozen-lockfile
 COPY . .
-# Expose port
-EXPOSE 3000
-# Start the app
-CMD [ "yarn", "start" ]
+RUN yarn build
+
+FROM nginx:latest AS server
+COPY --from=builder ./app/build /usr/share/nginx/html
