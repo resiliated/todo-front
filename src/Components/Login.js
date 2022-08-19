@@ -52,6 +52,7 @@ export function Login({onLogin, isConnected, error}){
                 </Form.Item>
             </Form>
             {error !== null ? <Alert message={error !==null ? error.message : ""} type="error" showIcon /> :null}
+            <small>You are running this application in <b>{process.env.NODE_ENV}</b> mode.</small>
         </Layout>
     );
 }
