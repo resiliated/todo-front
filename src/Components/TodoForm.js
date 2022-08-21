@@ -1,13 +1,12 @@
 import React from 'react';
-import { Button, Form, Input } from 'antd';
-import { Card} from 'antd';
+import { Layout, Button, Form, Input } from 'antd';
 import '../App.less';
 const { TextArea } = Input;
 
 
 export function TodoForm({createTodo, updateTodo, todoToEdit}) {
 
-    function handleTodoCreation(values){
+    function handleFormValidation(values){
         if(todoToEdit === null){
             createTodo({title: values.title, content: values.content});
         }else{
@@ -22,9 +21,9 @@ export function TodoForm({createTodo, updateTodo, todoToEdit}) {
     }
 
     return (
-        <Card>
+        <Layout>
           <Form className="container"
-            onFinish={handleTodoCreation}
+            onFinish={handleFormValidation}
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
@@ -51,7 +50,7 @@ export function TodoForm({createTodo, updateTodo, todoToEdit}) {
               <Button type="primary" htmlType="submit">{todoToEdit ? "Editer" : "Créer"}</Button>
             </Form.Item>
           </Form>
-        </Card>
+        </Layout>
     );
 }
 

@@ -36,7 +36,7 @@ export function Todo({todo, onTodoUpdate, onTodoDelete, onTodoEdit}){
           ]}
           >
           <Typography>
-            <Text strong>Créée le: {todo.creation}</Text>
+            <Text>{todo.content}</Text>
           </Typography>
         </Card>
     );

@@ -6,8 +6,9 @@ import APIService from './APIService.js'
 import './App.less';
 const { Header, Content, Footer } = Layout;
 
-const TodoList = React.lazy(() => import('./Components/TodoList.js'));
 const Login = React.lazy(() => import('./Components/Login.js'));
+const CategoryList = React.lazy(() => import('./Components/CategoryList.js'));
+const TodoList = React.lazy(() => import('./Components/TodoList.js'));
 const TodoForm = React.lazy(() => import('./Components/TodoForm.js'));
 
 export function App() {
@@ -21,7 +22,7 @@ export function App() {
 
     function readTodos() {
         setIsLoaded(false);
-        APIService.readAll().then(todos => {
+        APIService.todo.readAll().then(todos => {
             setTodos(todos);
             setIsLoaded(true);
         });
@@ -54,9 +55,8 @@ export function App() {
     }
 
     function createTodo(todoToCreate){
-        //todoToCreate.userId = userId;
         setIsLoaded(false);
-        APIService.create(todoToCreate).then(createdTodo => {
+        APIService.todo.create(todoToCreate).then(createdTodo => {
             setTodos(todos => [...todos, createdTodo]);
             navigate("/list");
             setIsLoaded(true);
@@ -65,7 +65,7 @@ export function App() {
 
     function updateTodo(todoToUpdate){
         setIsLoaded(false);
-        APIService.update(todoToUpdate).then(updatedTodo => {
+        APIService.todo.update(todoToUpdate).then(updatedTodo => {
             var currentTodos = [...todos];
             var index = currentTodos.findIndex(todo => todo.id === updatedTodo.id);
             currentTodos[index] = updatedTodo;
@@ -82,7 +82,7 @@ export function App() {
 
     function deleteTodo(todoTodoDelete){
         setIsLoaded(false);
-        APIService.delete(todoTodoDelete).then(response => {
+        APIService.todo.delete(todoTodoDelete).then(response => {
             setTodos([...todos].filter(todo =>{ return todo.id !== todoTodoDelete.id}));
             setIsLoaded(true);
         });
@@ -103,6 +103,7 @@ export function App() {
                     <Routes>
                         <Route path="/" element={<Suspense fallback={<>...</>}> <Login onLogin={onLogin} isConnected={isConnected} error={error}/> </Suspense>} />
                         <Route path="/list" element={<Suspense fallback={<>...</>}><TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} editTodo={editTodo} title="Todo liste de Boris" /></Suspense>} />
+                        <Route path="/category" element={<Suspense fallback={<>...</>}><CategoryList /></Suspense>} />
                         <Route path="/add" element={<Suspense fallback={<>...</>}><TodoForm createTodo={createTodo} updateTodo={updateTodo} todoToEdit={todoToEdit}/></Suspense>} />
                     </Routes>
                 </Content>

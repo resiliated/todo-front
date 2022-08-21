@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { UnorderedListOutlined, DiffOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
+import { PartitionOutlined,UnorderedListOutlined, DiffOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu } from 'antd';
 import TodoHelpers from '../TodoHelpers.js'
@@ -37,8 +37,15 @@ export function Menus({isConnected, onNav, onLogout}){
         {
             "key": "list",
             "icon": <UnorderedListOutlined />,
-            "label": "Liste des todos",
+            "label": "Todos",
             "location": "/list",
+            "disabled": !isConnected
+        },
+        {
+            "key": "category",
+            "icon": <PartitionOutlined />,
+            "label": "Categories",
+            "location": "/category",
             "disabled": !isConnected
         },
         {
