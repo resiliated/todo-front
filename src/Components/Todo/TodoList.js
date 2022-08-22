@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 import { Radio, PageHeader, Space, List, Tag } from 'antd';
 import Todo from './Todo.js'
-import TodoHelpers from '../TodoHelpers.js'
+import TodoHelpers from '../../TodoHelpers.js'
 
 export function TodoList({todos, updateTodo, deleteTodo, editTodo}) {
 

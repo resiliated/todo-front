@@ -3,6 +3,17 @@
 body{
 background-color: #f0f2f5;
 }
+
+nav{
+position: fixed;
+height: 100%;
+z-index: 999;
+}
+
+main{
+margin-left: 80px;
+}
+
 .hidden{
 display: none;
 }
@@ -12,29 +23,18 @@ display: block;
 }
 
 /** OVERRIDE ANTD **/
-.ant-layout{
-/**height:100vh;**/
+.ant-menu{
+height: 100%;
 }
-
-.ant-layout .ant-row{
-//margin: 100px;
-}
-
-.ant-layout-header{
-height: fit-content;
-width: 100%;
-padding: initial;
-}
-
 .ant-layout-content{
 padding: 10px;
 }
 
 .ant-layout-footer{
-width: 100%;
-text-align: center;
 position: fixed;
 bottom: 0;
 z-index: 1;
+padding: 10px;
+text-align: center;
 }
 

@@ -1,15 +1,15 @@
 import React, { useState, Suspense } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Layout, Spin } from 'antd';
-import Menus from './Components/Menus.js';
+import Navigation from './Components/Navigation.js';
 import APIService from './APIService.js'
 import './App.less';
 const { Header, Content, Footer } = Layout;
 
 const Login = React.lazy(() => import('./Components/Login.js'));
-const CategoryList = React.lazy(() => import('./Components/CategoryList.js'));
-const TodoList = React.lazy(() => import('./Components/TodoList.js'));
-const TodoForm = React.lazy(() => import('./Components/TodoForm.js'));
+const CategoryList = React.lazy(() => import('./Components/Category/CategoryList.js'));
+const TodoList = React.lazy(() => import('./Components/Todo/TodoList.js'));
+const TodoForm = React.lazy(() => import('./Components/Todo/TodoForm.js'));
 
 export function App() {
     const [todos, setTodos] = useState([]);
@@ -94,11 +94,10 @@ export function App() {
     }
 
     return (
-        <Layout>
-            <Spin spinning={!isLoaded} tip="chargement...">
-                <Header>
-                    <Menus onLogout={onLogout} onNav={onNav} isConnected={isConnected} />
-                </Header>
+        <Spin spinning={!isLoaded} tip="chargement...">
+            <Layout>
+
+               <Navigation onLogout={onLogout} onNav={onNav} isConnected={isConnected} />
                 <Content>
                     <Routes>
                         <Route path="/" element={<Suspense fallback={<>...</>}> <Login onLogin={onLogin} isConnected={isConnected} error={error}/> </Suspense>} />
@@ -106,12 +105,12 @@ export function App() {
                         <Route path="/category" element={<Suspense fallback={<>...</>}><CategoryList /></Suspense>} />
                         <Route path="/add" element={<Suspense fallback={<>...</>}><TodoForm createTodo={createTodo} updateTodo={updateTodo} todoToEdit={todoToEdit}/></Suspense>} />
                     </Routes>
+                    <Footer>
+                        <small>Boris Design ©2022 Created by me</small>
+                    </Footer>
                 </Content>
-                <Footer>
-                    Boris Design ©2022 Created by me
-                </Footer>
-            </Spin>
-        </Layout>
+            </Layout>
+        </Spin>
     );
 }
 

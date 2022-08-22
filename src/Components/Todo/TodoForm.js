@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Button, Form, Input } from 'antd';
-import '../App.less';
+import '../../App.less';
 const { TextArea } = Input;
 
 

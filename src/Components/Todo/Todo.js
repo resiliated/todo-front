@@ -6,7 +6,7 @@ import {
   EditOutlined,
   DeleteOutlined
 } from '@ant-design/icons';
-import TodoHelpers from '../TodoHelpers.js'
+import TodoHelpers from '../../TodoHelpers.js'
 
 
 const { Text } = Typography;

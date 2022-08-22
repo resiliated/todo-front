@@ -44,11 +44,24 @@ const APIService = {
 
     /*** CATEGORY OPERATIONS ***/
     category: {
+        create: function(category){
+            return fetch(CATEGORY_API, {
+                method: 'POST',
+                headers: DEFAULT_HEADERS,
+                body: JSON.stringify(category)
+            }).then(res => res.json());
+        },
         readAll: function() {
             return fetch(CATEGORY_API, {
                 method: 'GET',
                 headers: DEFAULT_HEADERS
             }).then(res => res.json());
+        },
+        delete: function(category){
+            return fetch(CATEGORY_API+"/"+category.id, {
+                method: 'DELETE',
+                headers: DEFAULT_HEADERS
+            }).then();
         }
     },
 

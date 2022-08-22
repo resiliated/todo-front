@@ -83,6 +83,10 @@ const TodoHelpers = {
             selectedKey = "list";
             break;
 
+            case "/category":
+            selectedKey = "category";
+            break;
+
             case "/add":
             selectedKey = "add";
             break;

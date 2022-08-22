@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { PartitionOutlined,UnorderedListOutlined, DiffOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
+import { MenuUnfoldOutlined, MenuFoldOutlined, PartitionOutlined,UnorderedListOutlined, DiffOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from "react-router-dom";
-import { Menu } from 'antd';
+import { Menu, Button } from 'antd';
 import TodoHelpers from '../TodoHelpers.js'
 
 
-export function Menus({isConnected, onNav, onLogout}){
+export function Navigation({isConnected, onNav, onLogout}){
 
     let navigate = useNavigate();
     let location = useLocation();
@@ -13,6 +13,11 @@ export function Menus({isConnected, onNav, onLogout}){
         return TodoHelpers.findKeyFromPath(location.pathname);
     }, [location]);
     const [selectedKey, setSelectedKey] = useState(getSelectedKey());
+    const [collapsed, setCollapsed] = useState(true);
+
+    function toggleCollapsed() {
+        setCollapsed(!collapsed);
+    }
 
     useEffect(() => {
         setSelectedKey(getSelectedKey(location));
@@ -28,12 +33,7 @@ export function Menus({isConnected, onNav, onLogout}){
     }
 
     const items = [
-        {
-            "key": "login",
-            "icon": isConnected ? <LogoutOutlined /> : <LoginOutlined />,
-            "label": isConnected ? "Se déconnecter" :"Se connecter",
-            "location": "/"
-        },
+
         {
             "key": "list",
             "icon": <UnorderedListOutlined />,
@@ -54,11 +54,35 @@ export function Menus({isConnected, onNav, onLogout}){
             "label": "Ajouter une todo",
             "location": "/add",
             "disabled": !isConnected
+        },
+        {
+            "key": "login",
+            "icon": isConnected ? <LogoutOutlined /> : <LoginOutlined />,
+            "label": isConnected ? "Se déconnecter" :"Se connecter",
+            "location": "/"
         }
     ];
     return (
-        <Menu onSelect={onSelect} items={items} defaultSelectedKeys={["login"]} selectedKeys={[selectedKey]}/>
+        <nav>
+            <Button
+                type="primary"
+                onClick={toggleCollapsed}
+                style={{
+                  margin: 16,
+                }}
+                >
+                {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            </Button>
+            <Menu
+                inlineCollapsed={collapsed}
+                mode="inline"
+                onSelect={onSelect}
+                items={items}
+                defaultSelectedKeys={["login"]}
+                selectedKeys={[selectedKey]}
+            />
+        </nav>
     )
 }
 
-export default Menus;
+export default Navigation;
