@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import CategoryForm from './CategoryForm.js';
 import APIService from '../../APIService.js'
 import { Layout, List, Divider, Typography, Button } from 'antd';
@@ -11,13 +11,22 @@ export function CategoryList() {
     const [categories, setCategories] = useState([]);
     const [formVisibility, setFormVisibility] = useState(false);
 
+   const [loaded, setLoaded] = useState(false); //TODO use context loaded
 
+    useEffect(() => {
+
+        if(!loaded){
+            readCategory();
+        }
+
+    });
 
     function onCancel(){
         setFormVisibility(false);
     }
 
     function createCategory(title){
+        console.log("Create category: "+ title);
         APIService.category.create({title: title}).then(category => {
             readCategory();
             setFormVisibility(false);
@@ -27,6 +36,7 @@ export function CategoryList() {
     function readCategory() {
         APIService.category.readAll().then(list => {
             setCategories(list);
+            setLoaded(true);
         });
     }
 
@@ -35,8 +45,6 @@ export function CategoryList() {
             readCategory();
         });
     }
-
-    readCategory();
 
 return (
     <Layout>

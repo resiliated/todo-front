@@ -36,7 +36,8 @@ export function Todo({todo, onTodoUpdate, onTodoDelete, onTodoEdit}){
           ]}
           >
           <Typography>
-            <Text>{todo.content}</Text>
+                    <Text>{todo.category.title}</Text>
+
           </Typography>
         </Card>
     );
