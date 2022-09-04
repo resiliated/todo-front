@@ -28,17 +28,23 @@ export function Todo({todo, onTodoUpdate, onTodoDelete, onTodoEdit}){
 
     return (
         <Card
-          title={<Row><Col span={18}><Text ellipsis={true}>{todo.title}</Text></Col><Col span={6} ><Tag color={TodoHelpers.getStateColor(todo)}>{TodoHelpers.getStateContent(todo)}</Tag></Col></Row>}
-          actions={[
+            title={<Row><Col span={18}><Text ellipsis={true}>{todo.title}</Text></Col><Col span={6} ><Tag color={TodoHelpers.getStateColor(todo)}>{TodoHelpers.getStateContent(todo)}</Tag></Col></Row>}
+            actions={[
             <StepForwardOutlined onClick={handleNextState}/>,
             <EditOutlined onClick={handleTodoEdit}/>,
             <DeleteOutlined onClick={handleTodoDelete}/>
-          ]}
-          >
-          <Typography>
-                    <Text>{todo.category.title}</Text>
-
-          </Typography>
+            ]}
+        >
+            <Typography>
+                <Text>
+                Categorie: {todo.category.title}
+                </Text>
+            </Typography>
+            <Typography>
+                <Text>
+                Contenu: {todo.content}
+                </Text>
+            </Typography>
         </Card>
     );
 }

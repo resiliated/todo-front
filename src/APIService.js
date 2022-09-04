@@ -4,30 +4,46 @@ DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
 },
 BASE_URL = "http://localhost:8080",
-TODO_API = BASE_URL + "/todo",
-CATEGORY_API = BASE_URL + "/category",
-LOGIN_API = BASE_URL + "/users/login";
+TODO_API = "/todo",
+CATEGORY_API = "/category",
+LOGIN_API = "/users/login";
+
+function computeUrl(endpoint){ //TODO
+    return BASE_URL + endpoint;
+}
 
 const APIService = {
     /*** TODO OPERATIONS ***/
     todo: {
         create: function(todoToCreate) {
-            return fetch(TODO_API, {
+            return fetch(computeUrl(TODO_API), {
                 method: 'POST',
                 headers: DEFAULT_HEADERS,
                 body: JSON.stringify(todoToCreate)
             }).then(res => res.json());
         },
 
-        readAll: function() {
-            return fetch(TODO_API, {
+        read: function(todoId){
+            return fetch(computeUrl(TODO_API) + "/" + todoId, {
+                method: 'GET',
+                headers: DEFAULT_HEADERS
+            }).then(res => res.json());
+        },
+
+        readAll: function(categoryId) {
+            var URL = computeUrl(TODO_API);
+            if(categoryId != null){
+                URL = computeUrl(CATEGORY_API) + "/" + categoryId + TODO_API;
+            }
+
+            return fetch(URL , {
                 method: 'GET',
                 headers: DEFAULT_HEADERS
             }).then(res => res.json());
         },
 
         update: function(todoToUpdate){
-            return fetch(TODO_API + "/" + todoToUpdate.id, {
+            return fetch(computeUrl(TODO_API) + "/" + todoToUpdate.id, {
                 method: 'PATCH',
                 headers: DEFAULT_HEADERS,
                 body: JSON.stringify(todoToUpdate)
@@ -35,7 +51,7 @@ const APIService = {
         },
 
         delete: function(todoToDelete){
-            return fetch(TODO_API+"/"+todoToDelete.id, {
+            return fetch(computeUrl(TODO_API)+"/"+todoToDelete.id, {
                 method: 'DELETE',
                 headers: DEFAULT_HEADERS
             }).then();
@@ -45,20 +61,20 @@ const APIService = {
     /*** CATEGORY OPERATIONS ***/
     category: {
         create: function(category){
-            return fetch(CATEGORY_API, {
+            return fetch(computeUrl(CATEGORY_API), {
                 method: 'POST',
                 headers: DEFAULT_HEADERS,
                 body: JSON.stringify(category)
             }).then(res => res.json());
         },
         readAll: function() {
-            return fetch(CATEGORY_API, {
+            return fetch(computeUrl(CATEGORY_API), {
                 method: 'GET',
                 headers: DEFAULT_HEADERS
             }).then(res => res.json());
         },
         delete: function(category){
-            return fetch(CATEGORY_API+"/"+category.id, {
+            return fetch(computeUrl(CATEGORY_API)+"/"+category.id, {
                 method: 'DELETE',
                 headers: DEFAULT_HEADERS
             }).then();
@@ -68,10 +84,10 @@ const APIService = {
     /*** LOGIN OPERATIONS ***/
     login: function(username, password){
         DEFAULT_HEADERS['Authorization'] = 'Basic ' + window.btoa(username+':'+password);
-        return fetch(LOGIN_API, {
+        return fetch(computeUrl(LOGIN_API), {
             method: 'GET',
             headers: DEFAULT_HEADERS
-        }).then(res => res.json());
+        });
     }
 };
 

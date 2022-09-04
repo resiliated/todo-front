@@ -1,10 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Button, Form, Input, Checkbox, Layout, Alert } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import APIService from '../APIService.js'
 
-export function Login({onLogin, isConnected, error}){
+export function Login(){
+
+    const
+    [error, setError] = useState(null);
+
+    let navigate = useNavigate(); //TODO use context
 
     function onFinish(values){
-        onLogin(values);
+        APIService.login(values.username, values.password).then((response) => {
+            if(response.status === 401){
+                setError(response.statusText);
+            }else{
+                navigate("/list");
+            }
+        });
     }
 
     return (
@@ -51,7 +64,7 @@ export function Login({onLogin, isConnected, error}){
                     <Button type="primary" htmlType="submit">Submit</Button>
                 </Form.Item>
             </Form>
-            {error !== null ? <Alert message={error !==null ? error.message : ""} type="error" showIcon /> :null}
+            {error !== null ? <Alert message={error !==null ? error : ""} type="error" showIcon /> :null}
             <small>You are running this application in <b>{process.env.NODE_ENV}</b> mode.</small>
         </Layout>
     );

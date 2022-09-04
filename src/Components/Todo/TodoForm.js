@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Layout, Button, Form, Input, Select } from 'antd';
+import { useSearchParams, useNavigate } from "react-router-dom";
 import APIService from '../../APIService.js'
 import '../../App.less';
 const { TextArea } = Input;
@@ -7,31 +8,49 @@ const { Option } = Select;
 
 
 
-export function TodoForm({createTodo, updateTodo, todoToEdit}) {
+export function TodoForm() {
 
-    const [loaded, setLoaded] = useState(false); //TODO use context loaded
+    const navigate = useNavigate(); //TODO use context
     const [categories, setCategories] = useState([]);
-
+    const [todoToEdit, setTodoToEdit] = useState(null);
+    const [searchParams] = useSearchParams();
+    const [form] = Form.useForm();
 
     useEffect(() => {
-        if(!loaded){
-            //TODO use context categories
-            APIService.category.readAll().then(list => {
-                setCategories(list);
-                setLoaded(true);
+        APIService.category.readAll().then(list => {
+            setCategories(list);
+        });
+
+        var todoId = searchParams.get('todoId')
+        if(todoId !== null){
+            APIService.todo.read(todoId).then(todo => {
+                setTodoToEdit(todo);
+                form.setFieldsValue({
+                    title: todo.title,
+                    category: todo.category.title,
+                    content: todo.content
+                })
             });
         }
-    });
+
+    }, [searchParams, form]);
 
     function handleFormValidation(values){
-        console.log(values);
         if(todoToEdit === null){
-            createTodo({title: values.title, content: values.content, categoryTitle: values.category});
+            APIService.todo.create({title: values.title, content: values.content, categoryTitle: values.category})
+            .then(() => {
+                navigate("/list");
+            });
         }else{
             todoToEdit.title = values.title;
+            todoToEdit.category.id = categories.find(category => category.title === values.category).id;
             todoToEdit.content = values.content;
-            updateTodo(todoToEdit);
+            APIService.todo.update(todoToEdit)
+            .then(() => {
+                navigate("/list");
+            });
         }
+
     }
 
     function onFinishFailed(errorInfo){
@@ -41,6 +60,7 @@ export function TodoForm({createTodo, updateTodo, todoToEdit}) {
     return (
         <Layout>
           <Form className="formContainer"
+            form={form}
             onFinish={handleFormValidation}
             onFinishFailed={onFinishFailed}
           >
@@ -69,7 +89,7 @@ export function TodoForm({createTodo, updateTodo, todoToEdit}) {
                 ]}
              >
              <Select
-                   defaultValue=""
+                   initialValue= {todoToEdit ? todoToEdit.category.title : null}
                  >
                 {categories.map((category, index) => (
                   <Option  value={category.title}>

@@ -5,7 +5,9 @@ import { Menu, Button } from 'antd';
 import TodoHelpers from '../TodoHelpers.js'
 
 
-export function Navigation({isConnected, onNav, onLogout}){
+export function Navigation({onNav, onLogout}){
+
+    const isConnected = true; //TODO use state context
 
     let navigate = useNavigate();
     let location = useLocation();

@@ -4,7 +4,7 @@ import { Layout, Spin } from 'antd';
 import Navigation from './Components/Navigation.js';
 import APIService from './APIService.js'
 import './App.less';
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 
 const Login = React.lazy(() => import('./Components/Login.js'));
 const CategoryList = React.lazy(() => import('./Components/Category/CategoryList.js'));
@@ -41,15 +41,16 @@ export function App() {
 
     function onLogin(ids){
         setIsLoaded(false);
-        APIService.login(ids.username, ids.password).then((user) => {
-            if(user.unauthorized){
+        APIService.login(ids.username, ids.password).then((response) => {
+            if(response.status === 401){
                 setIsLoaded(true);
-                setError(user);
+                setError(response.statusText);
             }else{
                 navigate("/list");
-                readTodos()
+                readTodos();
                 setIsConnected(true);
                 setIsLoaded(true);
+                setError(null);
             }
         });
     }

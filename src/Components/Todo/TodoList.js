@@ -1,22 +1,45 @@
-import React, { useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Radio, PageHeader, Space, List, Tag } from 'antd';
 import Todo from './Todo.js'
+import APIService from '../../APIService.js'
 import TodoHelpers from '../../TodoHelpers.js'
 
-export function TodoList({todos, updateTodo, deleteTodo, editTodo}) {
+export function TodoList() {
 
     const [filter, setFilter] = useState(TodoHelpers.getPriority({state: "ALL"}));
+    const [todos, setTodos] = useState([]);
+    let [searchParams] = useSearchParams();
+
+    let navigate = useNavigate(); //TODO use context
+
+    useEffect(() => {
+        console.log(searchParams.get('categoryId'));
+        APIService.todo.readAll(searchParams.get('categoryId')).then(todos => {
+            setTodos(todos);
+        });
+
+    }, [searchParams]);
 
     function onTodoUpdate(todoToUpdate){
-        updateTodo(todoToUpdate);
+        APIService.todo.update(todoToUpdate).then(updatedTodo => {
+            var
+            currentTodos = [...todos],
+            index = currentTodos.findIndex(todo => todo.id === updatedTodo.id);
+
+            currentTodos[index] = updatedTodo;
+            setTodos(currentTodos);
+        });
     }
 
     function onTodoDelete(todoToDelete){
-        deleteTodo(todoToDelete);
+        APIService.todo.delete(todoToDelete).then(response => {
+            setTodos([...todos].filter(todo =>{ return todo.id !== todoToDelete.id}));
+        });
     }
 
     function onTodoEdit(todoToEdit){
-        editTodo(todoToEdit);
+        navigate("/add?todoId=" +  todoToEdit.id);
     }
 
     function onChangeFilter(e){
