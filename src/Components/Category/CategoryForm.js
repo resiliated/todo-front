@@ -4,17 +4,13 @@ import { Modal, Form, Input } from 'antd';
 
 export function CategoryForm({visible, onAddCategory, onCancel}) {
 
-    var [title, setTitle] = useState("");
-
-    const handleChange = (event) => {
+    const
+    [title, setTitle] = useState(""),
+    handleChange = (event) => {
         const value = event.target.value;
         console.log(value);
         setTitle(value);
     };
-
-    function onFinishFailed(errorInfo){
-
-    }
 
     return(
         <Modal

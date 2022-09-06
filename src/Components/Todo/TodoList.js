@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext } from 'react';
+import { TodosContext } from '../../Context.js';
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Radio, PageHeader, Space, List, Tag } from 'antd';
 import Todo from './Todo.js'
@@ -7,19 +8,17 @@ import TodoHelpers from '../../TodoHelpers.js'
 
 export function TodoList() {
 
-    const [filter, setFilter] = useState(TodoHelpers.getPriority({state: "ALL"}));
-    const [todos, setTodos] = useState([]);
-    let [searchParams] = useSearchParams();
-
-    let navigate = useNavigate(); //TODO use context
+    const
+    [filter, setFilter] = useState(TodoHelpers.getPriority({state: "ALL"})),
+    [todos, setTodos] = useContext(TodosContext),
+    [searchParams] = useSearchParams(),
+    navigate = useNavigate();
 
     useEffect(() => {
-        console.log(searchParams.get('categoryId'));
         APIService.todo.readAll(searchParams.get('categoryId')).then(todos => {
             setTodos(todos);
         });
-
-    }, [searchParams]);
+    }, [searchParams, setTodos]);
 
     function onTodoUpdate(todoToUpdate){
         APIService.todo.update(todoToUpdate).then(updatedTodo => {

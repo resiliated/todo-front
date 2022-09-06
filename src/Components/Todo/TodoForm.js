@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import { CategoriesContext } from '../../Context.js';
 import { Layout, Button, Form, Input, Select } from 'antd';
 import { useSearchParams, useNavigate } from "react-router-dom";
 import APIService from '../../APIService.js'
@@ -10,16 +11,19 @@ const { Option } = Select;
 
 export function TodoForm() {
 
-    const navigate = useNavigate(); //TODO use context
-    const [categories, setCategories] = useState([]);
-    const [todoToEdit, setTodoToEdit] = useState(null);
-    const [searchParams] = useSearchParams();
-    const [form] = Form.useForm();
+    const
+    navigate = useNavigate(),
+    [categories, setCategories] = useContext(CategoriesContext),
+    [todoToEdit, setTodoToEdit] = useState(null),
+    [searchParams] = useSearchParams(),
+    [form] = Form.useForm();
 
     useEffect(() => {
-        APIService.category.readAll().then(list => {
-            setCategories(list);
-        });
+        if(categories.length === 0){ //category has never been loaded (never navigate on categoryList...)
+            APIService.category.readAll().then(list => {
+                setCategories(list);
+            });
+        }
 
         var todoId = searchParams.get('todoId')
         if(todoId !== null){
@@ -33,7 +37,7 @@ export function TodoForm() {
             });
         }
 
-    }, [searchParams, form]);
+    }, [searchParams, categories, setCategories, form]);
 
     function handleFormValidation(values){
         if(todoToEdit === null){

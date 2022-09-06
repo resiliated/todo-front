@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import CategoryForm from './CategoryForm.js';
 import APIService from '../../APIService.js'
+import { CategoriesContext } from '../../Context.js';
 import { Layout, List, Typography, Button } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-
-
 
 export function CategoryList() {
 
    const
-   [categories, setCategories] = useState([]),
+   [categories, setCategories] = useContext(CategoriesContext),
    [formVisibility, setFormVisibility] = useState(false),
-   [loaded, setLoaded] = useState(false); //TODO use context loaded
-
-   let navigate = useNavigate(); //TODO use context
+   navigate = useNavigate();
 
     useEffect(() => {
-        if(!loaded){
+        if(categories.length === 0){
             readCategory();
         }
     });
@@ -36,7 +32,6 @@ export function CategoryList() {
     function readCategory() {
         APIService.category.readAll().then(list => {
             setCategories(list);
-            setLoaded(true);
         });
     }
 

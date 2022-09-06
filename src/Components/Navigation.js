@@ -1,21 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { MenuUnfoldOutlined, MenuFoldOutlined, PartitionOutlined,UnorderedListOutlined, DiffOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, Button } from 'antd';
 import TodoHelpers from '../TodoHelpers.js'
+import { AuthContext } from '../Context.js';
 
 
-export function Navigation({onNav, onLogout}){
+export function Navigation(){
 
-    const isConnected = true; //TODO use state context
-
-    let navigate = useNavigate();
-    let location = useLocation();
-    const getSelectedKey = useCallback(() =>{
+    const
+    [authState, setAuthState] = useContext(AuthContext),
+    navigate = useNavigate(),
+    location = useLocation(),
+    getSelectedKey = useCallback(() =>{
         return TodoHelpers.findKeyFromPath(location.pathname);
-    }, [location]);
-    const [selectedKey, setSelectedKey] = useState(getSelectedKey());
-    const [collapsed, setCollapsed] = useState(true);
+    }, [location]),
+    [selectedKey, setSelectedKey] = useState(getSelectedKey()),
+    [collapsed, setCollapsed] = useState(true);
 
     function toggleCollapsed() {
         setCollapsed(!collapsed);
@@ -27,9 +28,8 @@ export function Navigation({onNav, onLogout}){
 
 
     function onSelect(e){
-        onNav();
-        if(isConnected && TodoHelpers.findKeyFromPath(e.item.props.location) === "login"){
-            onLogout();
+        if(authState.logged && TodoHelpers.findKeyFromPath(e.item.props.location) === "login"){
+            setAuthState({logged: false});
         }
         navigate(e.item.props.location);
     }
@@ -41,26 +41,26 @@ export function Navigation({onNav, onLogout}){
             "icon": <UnorderedListOutlined />,
             "label": "Todos",
             "location": "/list",
-            "disabled": !isConnected
+            "disabled": !authState.logged
         },
         {
             "key": "category",
             "icon": <PartitionOutlined />,
             "label": "Categories",
             "location": "/category",
-            "disabled": !isConnected
+            "disabled": !authState.logged
         },
         {
             "key": "add",
             "icon": <DiffOutlined />,
             "label": "Ajouter une todo",
             "location": "/add",
-            "disabled": !isConnected
+            "disabled": !authState.logged
         },
         {
             "key": "login",
-            "icon": isConnected ? <LogoutOutlined /> : <LoginOutlined />,
-            "label": isConnected ? "Se déconnecter" :"Se connecter",
+            "icon": authState.logged ? <LogoutOutlined /> : <LoginOutlined />,
+            "label": authState.logged ? "Se déconnecter" :"Se connecter",
             "location": "/"
         }
     ];

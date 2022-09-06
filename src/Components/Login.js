@@ -1,20 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
+import { AuthContext } from '../Context.js';
 import { Button, Form, Input, Checkbox, Layout, Alert } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import APIService from '../APIService.js'
 
+
 export function Login(){
 
     const
-    [error, setError] = useState(null);
-
-    let navigate = useNavigate(); //TODO use context
+    [error, setError] = useState(null),
+    [authState, setAuthState] = useContext(AuthContext),
+    navigate = useNavigate();
 
     function onFinish(values){
         APIService.login(values.username, values.password).then((response) => {
             if(response.status === 401){
                 setError(response.statusText);
-            }else{
+            }else if(!authState.logged){
+                setAuthState({logged: true});
                 navigate("/list");
             }
         });
