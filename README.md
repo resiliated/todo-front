@@ -28,5 +28,5 @@ docker build -t todo-front:prod .
 
 Run docker image:
 ```bash
-docker run -p 3000:3000 todo:prod
+docker run -p 3000:3000 todo-front:prod
 ```
