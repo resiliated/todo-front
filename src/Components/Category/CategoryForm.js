@@ -8,7 +8,6 @@ export function CategoryForm({visible, onAddCategory, onCancel}) {
     [title, setTitle] = useState(""),
     handleChange = (event) => {
         const value = event.target.value;
-        console.log(value);
         setTitle(value);
     };
 
@@ -19,7 +18,6 @@ export function CategoryForm({visible, onAddCategory, onCancel}) {
             onOk={(e)=>{
             onAddCategory(title);
             setTitle("");
-            console.log("kUDSHFk<ze: " + title);
         }}
         >
             <Form className="formContainer"

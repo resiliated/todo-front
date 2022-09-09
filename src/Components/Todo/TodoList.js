@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext } from 'react';
-import { TodosContext } from '../../Context.js';
+import { TodosContext, CategoriesContext } from '../../Context.js';
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Radio, PageHeader, Space, List, Tag } from 'antd';
 import Todo from './Todo.js'
@@ -11,14 +11,19 @@ export function TodoList() {
     const
     [filter, setFilter] = useState(TodoHelpers.getPriority({state: "ALL"})),
     [todos, setTodos] = useContext(TodosContext),
+    [categories, setCategories] = useContext(CategoriesContext),
+    [categoryId, setCategoryId] = useState(null),
     [searchParams] = useSearchParams(),
     navigate = useNavigate();
 
     useEffect(() => {
         APIService.todo.readAll(searchParams.get('categoryId')).then(todos => {
+            setCategoryId(searchParams.get('categoryId'));
             setTodos(todos);
         });
-    }, [searchParams, setTodos]);
+
+        console.log(categories.find(c => c.id == categoryId));
+    }, [searchParams, setTodos, setCategoryId, categoryId, categories]);
 
     function onTodoUpdate(todoToUpdate){
         APIService.todo.update(todoToUpdate).then(updatedTodo => {
@@ -48,7 +53,7 @@ export function TodoList() {
     return(
         <div>
             <PageHeader
-              title="Status todo"
+              title={categoryId ? categories.find(c => c.id == categoryId).title : "Toutes tes todos frère"}
               subTitle=""
               className="site-page-header"
             >
